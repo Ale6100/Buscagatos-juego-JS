@@ -8,10 +8,47 @@
     <title>Buscagatos</title>
 </head>
 <body>
+    <header>
+        <div>
+            <h1>Busca<span>gatos</span></h1>
+        </div>
+
+        <form id="inputs">
+            <div id="inputs2">
+                <div>
+                    <p>Filas:</p>
+                    <input id="cantFilas" type="number" value="10">
+                </div>
+
+                <div>
+                    <p>Columnas:</p>
+                    <input id="cantColumnas" type="number" value="10">
+                </div>
+
+                <div>
+                    <p>Gatos aproximados (%):</p>
+                    <input id="dificPorcent" type="number" value="10">
+                </div>
+
+                <input id="iniciarJuego" type="submit" value="Iniciar Juego">
+            </div>
+            
+            <div id="divComentarios">
+                <p>Comentarios:</p>
+                <textarea id="comentarios" rows="1">(acá van a ir comentarios)</textarea>
+            </div>
+        </form>
+    </header>
+
     <main>
         <table id="tablero">
+            <section id="cartelInicial">
+                <p>Oh no! Remi el ratón se perdió buscando su queso y ha entrado en un terreno lleno de gatos! Ayúdalo a examinar el área y escapar sin que lo detecten los felinos.</p>
+                <p id="bienvenida">Bienvenido! Se juega igual que el buscaminas. Establece las condiciones iniciales que prefieras y presiona el botón "Iniciar Juego" para empezar una nueva partida!</p>
+            </section>
         </table>
     </main>
+
     <script src="./js/Clases.js"></script>
     <script src="./js/script.js"></script>
 </body>

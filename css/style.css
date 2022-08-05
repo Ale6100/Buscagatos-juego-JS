@@ -11,7 +11,79 @@ head {
 body, main{
     width: 100%;
     height: 100%;
-    background-color: gray;
+    background-color: rgb(133, 140, 158);
+}
+
+#tituloImputs {
+    width: 100%;
+    display: inline-block;
+}
+
+#inputs {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+    align-items: center;
+}
+
+#inputs * {
+    font-size: 1.0rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+#inputs2 {
+    padding: 5px;
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    border: 2px solid black;
+    border-radius: 5px;
+    box-shadow: 1px -1px;
+}
+
+div p{
+    margin-bottom: 1px;
+    font-weight: bold;
+}
+
+img{
+    width: 100%;
+}
+
+span {
+    color: rgb(128, 64, 0);
+}
+
+input {
+    width: 100px;
+    text-align: center;
+    border: 0px solid black;
+    border-radius: 5px;
+}
+
+#iniciarJuego {
+    height: 40px;
+}
+
+#divComentarios {
+    padding: 5px;
+    width: 20rem;
+    border: 2px solid black;
+    border-radius: 5px;
+    box-shadow: 1px -1px;
+}
+
+#comentarios {
+    width: 100%;
+    text-align: center;
+    border: 0px solid black;
+    border-radius: 5px;
 }
 
 #tablero {
@@ -19,6 +91,21 @@ body, main{
     margin: auto;
     text-align: center;
     user-select: none;
+}
+
+#cartelInicial {
+    height: 90%;
+    margin: 5% 5%;
+    text-align: center;
+    font-size: 2rem
+}
+
+#cartelInicial p{
+    margin-top: 20px;
+}
+
+#bienvenida {
+    font-size: 1.5rem;
 }
 
 .casilleroOculto {
