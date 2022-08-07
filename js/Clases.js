@@ -6,3 +6,11 @@ class Casillero {
         this.bandera = false // sin bandera (todavía no usado)
     }
 }
+
+class InputsPasados {
+    constructor(cantidadDeFilas, cantidadDeColumnas, porcentajeDeGatos) {
+        this.filas = cantidadDeFilas
+        this.columnas = cantidadDeColumnas
+        this.porcentGatos = porcentajeDeGatos
+    }
+}
