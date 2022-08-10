@@ -2,6 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    text-align: center;
 }
 
 head {
@@ -28,7 +29,6 @@ header {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-    text-align: center;
     align-items: center;
 }
 
@@ -38,7 +38,6 @@ header {
 
 h1 {
     font-size: 2.5rem;
-    text-align: center;
 }
 
 #inputs2 {
@@ -66,7 +65,6 @@ span {
 
 input {
     width: 100px;
-    text-align: center;
     border: 0px solid black;
     border-radius: 5px;
 }
@@ -92,7 +90,6 @@ input {
 
 #comentarios {
     width: 100%;
-    text-align: center;
     border: 0px solid black;
     border-radius: 5px;
 }
@@ -100,15 +97,11 @@ input {
 #tablero {
     border: 1px solid black;
     margin: auto;
-    text-align: center;
     user-select: none;
     font-weight: bold;
 }
 
 #cartelInicial {
-    /* height: 90%;
-    margin: 5% 5%; */
-    text-align: center;
     font-size: 2rem
 }
 
@@ -116,18 +109,23 @@ input {
     margin-top: 20px;
 }
 
-#bienvenida {
+#bienvenida, #mensajeFinal {
     font-size: 1.5rem;
 }
 
-.casilleroOculto {
+/*--- clases para los casilleros ---*/
+
+.casilleroOculto { /*Clase que viene por defecto en todos los casilleros*/
     height: 2rem;
     width: 2rem;
     border: 1px solid black;
     background-color: rgb(100, 50, 255);
 }
 
-.casilleroSinBomba {
+.casilleroVisible {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid black;
     background-color: rgb(50, 0, 255);
 }
 
@@ -151,4 +149,16 @@ td:hover {
     font-size: 0px;
 }
 
+.colorPerdedorFondo {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid black;
+    background-color: rgb(50, 50, 50);
+}
 
+.colorGanadorFondo {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid black;
+    background-color: rgb(0, 255, 0);
+}
