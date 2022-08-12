@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://img.icons8.com/color-glass/48/000000/cat-head.png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"> <!-- Toastify -->
     <link rel="stylesheet" href="./css/style.css">
     <title>Buscagatos</title>
 </head>
@@ -15,44 +16,39 @@
         </div>
 
         <form id="form">
-            <div id="inputs2">
-                <div>
-                    <p>Filas:</p>
-                    <input id="cantFilas" type="number" value="11">
-                </div>
-
-                <div>
-                    <p>Columnas:</p>
-                    <input id="cantColumnas" type="number" value="11">
-                </div>
-
-                <div>
-                    <p>Gatos aproximados (%):</p>
-                    <input id="dificPorcent" type="number" value="20">
-                </div>
-
-                <input id="botonIniciarJuego" type="submit" value="Iniciar Juego">
+            <div>
+                <p>Filas:</p>
+                <input id="cantFilas" type="number" value="11">
             </div>
-            
-            <div id="divComentarios">
-                <p>Comentarios:</p>
-                <textarea id="comentarios" rows="1">(acá van a ir comentarios)</textarea>
+
+            <div>
+                <p>Columnas:</p>
+                <input id="cantColumnas" type="number" value="11" step="none">
             </div>
+
+            <div>
+                <p>Gatos aproximados (%):</p>
+                <input id="dificPorcent" type="number" value="20" required>
+            </div>
+
+            <input id="botonIniciarJuego" type="submit" value="Iniciar Juego">
         </form>
     </header>
 
     <main>
-        <table id="tablero">
+        <table id="tablero" cellspacing="0">
             <section id="cartelInicial">
-                <p>Oh no! Remi el ratón se perdió buscando su queso y ha entrado en un terreno lleno de gatos! Ayúdalo a examinar el área y escapar sin que lo detecten los felinos.</p>
-                <p id="bienvenida">Bienvenido! Juego similar al buscaminas. Establece las condiciones iniciales que prefieras y presiona el botón "Iniciar Juego" para empezar una nueva partida!</p>
+                <p>Oh no! Remy el ratón se perdió buscando su queso y ha entrado en un terreno lleno de gatos! Ayúdalo a examinar el área y escapar sin que lo detecten los felinos.</p>
+                <p id="bienvenida">Juego similar al buscaminas. Establece las condiciones iniciales que prefieras y presiona el botón "Iniciar Juego" para empezar una nueva partida!</p>
             </section>
         </table>
         <section>
-            <p id="mensajeFinal"></p>
+            <p id="consejosRandom"></p>
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script> <!-- Sweet Alert 2 -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>  <!-- Toastify -->
     <script src="./js/Clases.js"></script>
     <script src="./js/script.js"></script>
 </body>

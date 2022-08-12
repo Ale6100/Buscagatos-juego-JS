@@ -1,8 +1,9 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 head {
@@ -12,7 +13,7 @@ head {
 body, main{
     width: 100%;
     height: 100%;
-    background-color: rgb(92, 130, 235);
+    background-color: rgb(170, 170, 255);
 }
 
 header {
@@ -24,30 +25,23 @@ header {
     display: inline-block;
 }
 
-#form {
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
 #form * {
-    font-size: 1.0rem;
+    font-size: 1.4rem;
 }
 
-h1 {
-    font-size: 2.5rem;
-}
-
-#inputs2 {
+#form {
     padding: 5px;
-    width: 50%;
+    margin: 15px 5vw;
+    width: 90vw;
     display: flex;
     justify-content: space-evenly;
     border: 2px solid black;
     border-radius: 5px;
-    box-shadow: 1px -1px;
+    box-shadow: 2px -2px;
+}
+
+h1 {
+    font-size: 2.5rem;
 }
 
 div p{
@@ -65,33 +59,27 @@ span {
 
 input {
     width: 100px;
-    border: 0px solid black;
-    border-radius: 5px;
-}
-
-#botonIniciarJuego {
-    border: 1px solid white;
-    font-size: 20px;
-    width: 150px;
-}
-
-#botonIniciarJuego:hover {
-    background-color: rgb(93, 105, 135);
+    background-color: rgb(0, 0, 255);
+    border: 2px solid black;
+    border-radius: 10px;
     color: white;
 }
 
-#divComentarios {
-    padding: 5px;
-    width: 20rem;
+#botonIniciarJuego {
+    background-color: rgb(0, 0, 255);
     border: 2px solid black;
-    border-radius: 5px;
-    box-shadow: 1px -1px;
+    font-size: 1.5rem;
+    width: 170px;
+    color: white;
 }
 
-#comentarios {
-    width: 100%;
-    border: 0px solid black;
-    border-radius: 5px;
+#botonIniciarJuego:hover {
+    background-color: rgb(150, 150, 255);
+    color: black;
+}
+
+#botonIniciarJuego:active {
+    font-size: 1.4rem;
 }
 
 #tablero {
@@ -99,18 +87,30 @@ input {
     margin: auto;
     user-select: none;
     font-weight: bold;
+    box-shadow: 2px -2px;
 }
 
 #cartelInicial {
-    font-size: 2rem
+    padding: 20px;
+    margin: 15px 5vw;
+    width: 90vw;
+    border: 3px solid black;
+    border-radius: 10px;
+    font-size: 2rem;
+    box-shadow: 2px -2px;
 }
 
 #cartelInicial p{
     margin-top: 20px;
 }
 
-#bienvenida, #mensajeFinal {
+#bienvenida {
     font-size: 1.5rem;
+}
+
+#consejosRandom {
+    margin: 10px auto;
+    font-size: 2rem;
 }
 
 /*--- clases para los casilleros ---*/
@@ -119,18 +119,16 @@ input {
     height: 2rem;
     width: 2rem;
     border: 1px solid black;
-    background-color: rgb(100, 50, 255);
+    background-color: rgb(127, 127, 127);
 }
 
-.casilleroVisible {
+.visibleTexto {
+    font-size: 1rem;
     height: 2rem;
     width: 2rem;
     border: 1px solid black;
-    background-color: rgb(50, 0, 255);
-}
-
-td:hover {
-    opacity: 0.1;
+    background-color: rgb(0, 0, 255);
+    transition: background-color 0.3s;
 }
 
 .colorVerde {
@@ -153,7 +151,7 @@ td:hover {
     height: 2rem;
     width: 2rem;
     border: 1px solid black;
-    background-color: rgb(50, 50, 50);
+    background-color: rgb(255, 50, 50);
 }
 
 .colorGanadorFondo {
@@ -161,4 +159,67 @@ td:hover {
     width: 2rem;
     border: 1px solid black;
     background-color: rgb(0, 255, 0);
+}
+
+/*--- media queries ---*/
+
+@media screen and (max-width: 550px){
+    #form * {
+        font-size: 0.8rem;
+    }
+
+    input {
+        width: 60px;
+        border-radius: 7px;
+    }
+
+    #botonIniciarJuego {
+        font-size: 1rem;
+        width: 100px;
+    }
+
+    #botonIniciarJuego:active {
+        font-size: 0.9rem;
+    }
+
+    #cartelInicial {
+        font-size: 1.4rem;
+    }
+    
+    #bienvenida, #consejosRandom {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (min-width: 550px) and (max-width: 716px){
+    #form * {
+        font-size: 1rem;
+    }
+
+    input {
+        width: 80px;
+    }
+
+    #botonIniciarJuego {
+        font-size: 1.1rem;
+        width: 110px;
+    }
+
+    #botonIniciarJuego:active {
+        font-size: 1rem;
+    }
+
+    #cartelInicial {
+        font-size: 1.6rem;
+    }
+    
+    #bienvenida, #consejosRandom {
+        font-size: 1.4rem;
+    }
+}
+
+@media screen and (min-width: 716px){
+    td:hover {
+        opacity: 0.2;
+    }
 }
