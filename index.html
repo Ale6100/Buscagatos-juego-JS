@@ -12,7 +12,7 @@
 <body>
     <header>
         <div>
-            <h1>Busca<span>gatos</span></h1>
+            <h1><a href="index.html">Busca<span>gatos</span></a></h1>
         </div>
 
         <form id="form">
@@ -28,7 +28,7 @@
 
             <div>
                 <p>Gatos aproximados (%):</p>
-                <input id="dificPorcent" type="number" value="20" required>
+                <input id="dificPorcent" type="number" value="15" required>
             </div>
 
             <input id="botonIniciarJuego" type="submit" value="Iniciar Juego">
@@ -36,24 +36,6 @@
     </header>
 
     <main>
-        <section id="seleccionDispositivo" class="seleccionInputs">
-            <div>
-                <input id="pc" class="inputsResponsive seleccion" type="button" value="PC 🖥️">
-            </div>
-            <div>
-                <input id="movil" class="inputsResponsive" type="button" value="Móvil 📱">
-            </div>
-        </section>
-
-        <section id="seleccionClick" class="seleccionInputs displayNone">
-            <div>
-                <input id="clickIzquiedo" class="inputsResponsive seleccion" type="button" value="🔍">
-            </div>
-            <div>
-                <input id="clickDerecho" class="inputsResponsive" type="button" value="🚩">
-            </div>
-        </section>
-
         <table id="tablero" cellspacing="0">
             <section id="cartelInicial">
                 <p>Oh no! Remy el ratón se perdió buscando su queso y ha entrado en un terreno lleno de gatos! Ayúdalo a examinar el área y escapar sin que lo detecten los felinos.</p>

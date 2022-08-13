@@ -20,6 +20,11 @@ header {
     margin-bottom: 20px;
 }
 
+a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
 h1 {
     font-size: 2.5rem;
 }
@@ -34,8 +39,8 @@ span {
 
 #form {
     padding: 5px;
-    margin: 15px 5vw;
-    width: 90vw;
+    margin: 15px 1vw;
+    width: 98vw;
     display: flex;
     justify-content: space-evenly;
     border: 2px solid rgb(0, 0, 0);
@@ -71,37 +76,6 @@ input {
 
 #botonIniciarJuego:active {
     font-size: 1.4rem;
-}
-
-.seleccionInputs {
-    width: 100%;
-    display: flex;
-    justify-content:space-evenly;
-}
-
-.inputsResponsive {
-    font-size: 1rem;
-    width: 100px;
-    padding: 5px;
-    color: black;
-    background-color: rgb(240, 240, 240);
-    border: 0px solid rgb(0, 0, 0);
-}
-
-.inputsResponsive:hover {
-    background-color: rgb(200, 200, 200);
-}
-
-.seleccion {
-    border: 3px solid rgb(0, 0, 0);
-}
-
-#seleccionClick {
-    margin-bottom: 15px;
-}
-
-.displayNone {
-    display: none;
 }
 
 #tablero {
@@ -189,7 +163,7 @@ img{
 
 /*--- media queries ---*/
 
-@media screen and (max-width: 550px){
+@media screen and (max-width: 471px){
     #form * {
         font-size: 0.7rem;
     }
@@ -217,7 +191,7 @@ img{
     }
 }
 
-@media screen and (min-width: 550px) and (max-width: 716px){
+@media screen and (min-width: 471px) and (max-width: 658px){
     #form * {
         font-size: 1rem;
     }

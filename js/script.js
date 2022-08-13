@@ -74,10 +74,11 @@ function crearTableros(filas, columnas) { // Crea ambos tableros
 function mostrarConsejos(){ // Cada vez que se hace un click izquierdo hay un 10% de probabilidades de que se muestre un consejo random abajo del tablero
     if (Math.random()*100 < 10) { 
         let arrayConsejos = [
-            `Coloca banderas con para dejar marcada una posición donde sepas que hay un gato`,
+            `Coloca banderas con click izquierdo para dejar marcada una posición donde sepas que hay un gato`,
             `Los casilleros con números indican la cantidad de gatos a su alrededor`,
             `El primer casillero visible y sus vecinos nunca tendrán un gato`,
-            `No uses tu primer click en los bordes`]
+            `No uses tu primer click en los bordes`,
+            `Si estás en móvil o tablet debes mantener el dedo sobre un casillero para simular el click izquierdo`]
         consejosRandom.innerText = `Consejo random: ${arrayConsejos[parseInt(Math.random()*arrayConsejos.length)]}`
     } 
 }
@@ -401,29 +402,10 @@ function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cant
     return [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado]  // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
 }
 
-let dispositivoElegido = "PC" // El dispositivo predeterminado para jugar es la PC
-
-const botonMovil = document.getElementById("movil")
-const botonPC = document.getElementById("pc")
-
-botonMovil.addEventListener("click", () => { // Botón para indicarle al programa que vamos a jugar desde el móvil
-    botonPC.classList.remove("seleccion")
-    botonMovil.classList.add("seleccion")
-    dispositivoElegido = "Movil"
-})
-
-botonPC.addEventListener("click", () => {
-    botonMovil.classList.remove("seleccion")
-    botonPC.classList.add("seleccion")
-    dispositivoElegido = "PC"
-})
-
 const form = document.getElementById("form")
 
 form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar Juego"
     e.preventDefault() // Primero prevengo que haga lo que por defecto está hecho para hacer. Prevengo que actualice la página
-
-    document.getElementById("seleccionDispositivo").innerHTML = "" // Borro los botones para seleccionar "PC o Móvil", ya que no tienen ningún uso una vez que el juego inicia
 
     const filas = document.getElementById("cantFilas").value // Obtengo los valores de los inputs
     const columnas = document.getElementById("cantColumnas").value
@@ -458,53 +440,14 @@ form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar
             for (let j=0; j<columnas; j++) { 
                 const casillero = document.getElementById(`fila-${i+1}-columna-${j+1}`)
 
-                if (dispositivoElegido == "PC") { // Si el dispositivo elegido antes de iniciar es la PC, se ejecuta esto
-                    casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en un casillero cualquiera (en particular, en tablero[i][j])
-                        [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
-                    })
-    
-                    casillero.addEventListener("contextmenu", (e) => { // Comportamiento del click derecho para colocar o quitar banderas
-                        e.preventDefault()
-                        clickDerecho(tablero, i, j, casillero, juegoTerminado)
-                    })
-                
-                } else { // Si el dispositivo elegido antes de iniciar es el móvil, se ejecuta esto
-                    let eventoClickIzquierdo = 0
-                    let eventoClickDerecho = 0
+                casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en un casillero cualquiera (en particular, en tablero[i][j])
+                    [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
+                })
 
-                    document.getElementById("seleccionClick").classList.remove("displayNone") // Quito el "display none" de la etiqueta que contenía los botónes especiales para móvil
-
-                    const botonIzquierdo = document.getElementById("clickIzquiedo")
-                    const botonDerecho = document.getElementById("clickDerecho")
-
-                    botonIzquierdo.addEventListener("click", eventoPorDefecto = () => { // El botón izquierdo (el que tiene ícono de lupa) hace que cada click con el dedo tenga el comportamiento del click izquierdo si está seleccionado
-                        botonDerecho.classList.remove("seleccion")
-                        botonIzquierdo.classList.add("seleccion")
-
-                        if (eventoClickDerecho != 0) { // Si el evento del click derecho ya fué definido, entonces lo elimina
-                            casillero.removeEventListener("click", eventoClickDerecho)
-                        }
-
-                        casillero.addEventListener("click", eventoClickIzquierdo = () => { 
-                            [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
-                        })
-                    })
-
-                    eventoPorDefecto() // Ejecuto el evento que llamé "eventoPorDefecto" para que por defecto esté seleccionado el botón con icono de lupa
-
-                    botonDerecho.addEventListener("click", () => { // El botón derecho (el que tiene ícono de bandera) hace que cada click con el dedo tenga el comportamiento del click derecho si está seleccionado
-                        botonIzquierdo.classList.remove("seleccion")
-                        botonDerecho.classList.add("seleccion")
-
-                        if (eventoClickIzquierdo != 0) {
-                            casillero.removeEventListener("click", eventoClickIzquierdo)
-                        }
-
-                        casillero.addEventListener("click", eventoClickDerecho = () => {
-                            clickDerecho(tablero, i, j, casillero, juegoTerminado)
-                        })
-                    })
-                }
+                casillero.addEventListener("contextmenu", (e) => { // Comportamiento del click derecho para colocar o quitar banderas
+                    e.preventDefault()
+                    clickDerecho(tablero, i, j, casillero, juegoTerminado)
+                })                
             }
         }
     }
