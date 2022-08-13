@@ -20,9 +20,12 @@ header {
     margin-bottom: 20px;
 }
 
-#tituloImputs {
-    width: 100%;
-    display: inline-block;
+h1 {
+    font-size: 2.5rem;
+}
+
+span {
+    color: rgb(128, 64, 0);
 }
 
 #form * {
@@ -35,13 +38,9 @@ header {
     width: 90vw;
     display: flex;
     justify-content: space-evenly;
-    border: 2px solid black;
+    border: 2px solid rgb(0, 0, 0);
     border-radius: 5px;
     box-shadow: 2px -2px;
-}
-
-h1 {
-    font-size: 2.5rem;
 }
 
 div p{
@@ -49,20 +48,12 @@ div p{
     font-weight: bold;
 }
 
-img{
-    width: 100%;
-}
-
-span {
-    color: rgb(128, 64, 0);
-}
-
 input {
     width: 100px;
     background-color: rgb(0, 0, 255);
     border: 2px solid black;
     border-radius: 10px;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 #botonIniciarJuego {
@@ -70,20 +61,51 @@ input {
     border: 2px solid black;
     font-size: 1.5rem;
     width: 170px;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 #botonIniciarJuego:hover {
     background-color: rgb(150, 150, 255);
-    color: black;
+    color: rgb(0, 0, 0);
 }
 
 #botonIniciarJuego:active {
     font-size: 1.4rem;
 }
 
+.seleccionInputs {
+    width: 100%;
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.inputsResponsive {
+    font-size: 1rem;
+    width: 100px;
+    padding: 5px;
+    color: black;
+    background-color: rgb(240, 240, 240);
+    border: 0px solid rgb(0, 0, 0);
+}
+
+.inputsResponsive:hover {
+    background-color: rgb(200, 200, 200);
+}
+
+.seleccion {
+    border: 3px solid rgb(0, 0, 0);
+}
+
+#seleccionClick {
+    margin-bottom: 15px;
+}
+
+.displayNone {
+    display: none;
+}
+
 #tablero {
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     margin: auto;
     user-select: none;
     font-weight: bold;
@@ -94,7 +116,7 @@ input {
     padding: 20px;
     margin: 15px 5vw;
     width: 90vw;
-    border: 3px solid black;
+    border: 3px solid rgb(0, 0, 0);
     border-radius: 10px;
     font-size: 2rem;
     box-shadow: 2px -2px;
@@ -113,12 +135,16 @@ input {
     font-size: 2rem;
 }
 
+img{
+    width: 100%;
+}
+
 /*--- clases para los casilleros ---*/
 
 .casilleroOculto { /*Clase que viene por defecto en todos los casilleros*/
     height: 2rem;
     width: 2rem;
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     background-color: rgb(127, 127, 127);
 }
 
@@ -126,7 +152,7 @@ input {
     font-size: 1rem;
     height: 2rem;
     width: 2rem;
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     background-color: rgb(0, 0, 255);
     transition: background-color 0.3s;
 }
@@ -150,14 +176,14 @@ input {
 .colorPerdedorFondo {
     height: 2rem;
     width: 2rem;
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     background-color: rgb(255, 50, 50);
 }
 
 .colorGanadorFondo {
     height: 2rem;
     width: 2rem;
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     background-color: rgb(0, 255, 0);
 }
 
@@ -165,21 +191,21 @@ input {
 
 @media screen and (max-width: 550px){
     #form * {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     input {
-        width: 60px;
+        width: 50px;
         border-radius: 7px;
     }
 
     #botonIniciarJuego {
-        font-size: 1rem;
-        width: 100px;
+        font-size: 0.9rem;
+        width: 90px;
     }
 
     #botonIniciarJuego:active {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     #cartelInicial {
