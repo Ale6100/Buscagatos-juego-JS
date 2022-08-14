@@ -1,3 +1,5 @@
+"use strict";
+
 class Casillero { // Clase que crea casilleros
     constructor() {
         this.estado = "oculto" // "oculto" o "visible"

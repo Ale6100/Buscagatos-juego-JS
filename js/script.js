@@ -1,3 +1,5 @@
+"use strict";
+
 const tableroHTML = document.getElementById("tablero")
 
 let datosInputs
@@ -32,7 +34,7 @@ function mostrarError(filas, columnas, porcent) {
     } else if (filas*columnas > 2500) {
         inputIncorrecto(`¿En serio quieres ${filas*columnas} casilleros? Para que no forzar a tu computadora se permiten 2500 como máximo`, 6)
 
-    } else { // se ejecuta si porcent <= 0 || porcent >= 100 ya que es el último caso posible por el cual se ejecutó esta función
+    } else { // Se ejecuta si porcent <= 0 || porcent >= 100 ya que es el último caso posible por el cual se ejecutó esta función
         inputIncorrecto(`"Gatos aproximados (%)" establece el porcentaje de gatos aproximado que deseas tener en el tablero, por lo tanto no se permite colocar ${porcent}%`, 8)
     }
 }
@@ -74,21 +76,17 @@ function crearTableros(filas, columnas) { // Crea ambos tableros
 function mostrarConsejos(){ // Cada vez que se hace un click izquierdo hay un 10% de probabilidades de que se muestre un consejo random abajo del tablero
     if (Math.random()*100 < 10) { 
         let arrayConsejos = [
-            `Coloca banderas con click izquierdo para dejar marcada una posición donde sepas que hay un gato`,
+            `Coloca banderas con click derecho para dejar marcada una posición donde sepas que hay un gato`,
             `Los casilleros con números indican la cantidad de gatos a su alrededor`,
             `El primer casillero visible y sus vecinos nunca tendrán un gato`,
             `No uses tu primer click en los bordes`,
-            `Si estás en móvil o tablet debes mantener el dedo sobre un casillero para simular el click izquierdo`]
+            `Si estás en móvil o tablet debes mantener el dedo sobre un casillero para simular el click derecho`]
         consejosRandom.innerText = `Consejo random: ${arrayConsejos[parseInt(Math.random()*arrayConsejos.length)]}`
     } 
 }
 
 function perteneceAlTablero(filas, columnas, i, j) { // Devuelve true si tablero[i][j] pertenece al tablero. La uso para evitar errores a la hora de analizar los bordes
-    let res = true
-    if (i < 0 || j < 0 || i >= filas || j >= columnas) {
-        res = false
-    }
-    return res
+    return (i < 0 || j < 0 || i >= filas || j >= columnas) ? false : true
 }
 
 function analizarCasillerosVecinos(tablero, i, j) { // Recibe un tablero y una ubicación. Devuelve la cantidad de vecinos con gatos
@@ -116,7 +114,7 @@ function expandirLineaArribaYAbajo(tablero, i, j, direccion) { // Esta función 
 
             tablero[i+n][j].visibleTexto(tablero, i+n, j, document.getElementById(`fila-${i+1+n}-columna-${j+1}`))
 
-            expandirLineaIzquierdaYDerechaRama(tablero, i+n, j, "izquierda")
+            expandirLineaIzquierdaYDerechaRama(tablero, i+n, j, "izquierda") // Expande a la izquierda y derecha de la ubicación (i+n, j)
             expandirLineaIzquierdaYDerechaRama(tablero, i+n, j, "derecha")
 
             n += cambio
@@ -173,7 +171,7 @@ function expandirLineaArribaYAbajoRama(tablero, i, j, direccion) { // Esta funci
         }
         n += cambio
         if (!(perteneceAlTablero(tablero.length, tablero[0].length, i+n-cambio, j))) {
-            break
+            break // Si la ubicación (i+n-cambio, j) no pertenece al tablero, entonces no reinicio el while para que no me de error
         }
     }
 }
@@ -209,7 +207,7 @@ function expandirLineaIzquierdaYDerechaRama(tablero, i, j, direccion) {
     }
 }
 
-function expandirArea(tablero, i, j) {
+function expandirArea(tablero, i, j) { // Se para en la ubicación (i, j) y expande el área en sus cuatro lados. Las funciones "rama" sirven para expandir de la misma manera pero en ubicaciones distintas a la (i, j) logrando una expansión grande
     expandirLineaArribaYAbajo(tablero, i, j, "arriba") // Expande el area arriba
     expandirLineaArribaYAbajo(tablero, i, j, "abajo") // Expande el area abajo
     expandirLineaIzquierdaYDerecha(tablero, i, j, "izquierda") // Expande el area a la izquierda
@@ -228,6 +226,16 @@ function juegoGanado(tablero, filas, columnas, cantGatos) { // Devuelve true si 
     return res
 }
 
+function porcentajeDeVictorias(partidasGanadas, partidasPerdidas) {
+    let res
+    if (partidasGanadas + partidasPerdidas == 0) {
+        res = 0
+    } else {
+        res = Math.round(partidasGanadas*100/(partidasGanadas + partidasPerdidas))
+    }
+    return res
+}
+
 function actualizarRegistroPartidas(partidas, resultado) { // Actualiza la base de datos donde se guarda la cantidad de partidas ganadas y perdidas
     if (resultado == "ganar") {
         partidas.ganadas += 1
@@ -235,7 +243,8 @@ function actualizarRegistroPartidas(partidas, resultado) { // Actualiza la base 
         partidas.perdidas += 1
     }
     localStorage.setItem("partidasPasadas", JSON.stringify(partidas))
-    return Math.round(partidas.ganadas*100/(partidas.ganadas + partidas.perdidas)) // Devuelve el porcentaje de victorias obtenidas
+    victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
+    return porcentajeDeVictorias(partidas.ganadas, partidas.perdidas) // Devuelve el porcentaje de victorias obtenidas
 }
 
 function despedida(tablero, filas, columnas, resultado, cantidadDeClicks, partidas) { // Código que se ejecuta cuando terminó el juego
@@ -272,14 +281,15 @@ function despedida(tablero, filas, columnas, resultado, cantidadDeClicks, partid
             confirmButtonText: 'OK',
             showDenyButton: true,
             denyButtonText: `Eliminar registro`,
-        }).then( (result) => { // Elimina el registro de partidas ganadas y perdidas, en caso de que el usuario lo decida
+        }).then( (result) => { // Reinicia el registro de partidas ganadas y perdidas, en caso de que el usuario lo decida
             if (result.isDenied) {
                 Swal.fire({
                 title: 'Registro de victorias eliminado',
                 icon: 'success',
                 timer: 3000,
                 timerProgressBar: true})
-                localStorage.removeItem("partidasPasadas")
+                localStorage.setItem("partidasPasadas", JSON.stringify({ganadas : 0, perdidas : 0}))
+                victorias.innerText = "0%"
             }
         })
     } else { // Alerta especial en caso de haber perdido
@@ -292,10 +302,12 @@ function despedida(tablero, filas, columnas, resultado, cantidadDeClicks, partid
         })
     }
     let juegoTerminado = true
+    clearInterval(interval)
     return juegoTerminado
 }
 
 function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, partidas) { // Comportamiento del primer click sobre el tablero
+    let cantGatos, primerClickRealizado
     do { // Este do hace que siempre haya por lo menos un gato en el tablero
         cantGatos = 0
         for (let k=0; k<filas; k++) { // Este for coloca gatos aleatoriamente
@@ -402,6 +414,50 @@ function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cant
     return [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado]  // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
 }
 
+function agregarCero(numero) { // Recibe un número en formato string y le coloca un cero adelante si es menor que 10
+    let res = numero
+    if (parseInt(numero) < 10) {
+        res = "0" + res
+    }
+    return res
+}
+
+function iniciarCronometro() {
+    clearInterval(interval)  // Elimina el interval anterior y coloca "00" en el cartel del cronómetro, en caso de que no sea la primera vez que iniciamos el juego
+    cronometro.innerText = "00:00:00"
+    let segundos = 0 // El cronómetro siempre inicia en cero segundos
+    let minutos = 0 
+    let horas = 0
+    interval = setInterval( () => {
+        segundos += 1 // Cada vez que se ejecuta esto, se agrega un segundo
+        if (segundos >= 60) { // Si los segundos superan los 60, entonces los segundos vuelven a cero y se agrega un minuto
+            segundos = 0
+            minutos += 1
+        }
+        if (minutos >= 60) {
+            minutos = 0
+            horas += 1
+        }
+        cronometro.innerText = `${agregarCero(horas)}:${agregarCero(minutos)}:${agregarCero(segundos)}`
+    }, 1000)
+}
+
+const cronometro = document.getElementById("cronometro")
+cronometro.innerText = "00:00:00"
+
+let interval, partidas
+
+const victorias = document.getElementById("victorias") 
+
+if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exista el registro de las partidas, las obtiene
+    partidas = JSON.parse(localStorage.getItem("partidasPasadas"))
+    victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
+} else { // Si no hay un registro, lo crea
+    partidas = {ganadas : 0, perdidas : 0} // Cantidad de partidas ganadas y partidas por defecto
+    localStorage.setItem("partidasPasadas", JSON.stringify(partidas))
+    victorias.innerText = "0%"
+}
+
 const form = document.getElementById("form")
 
 form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar Juego"
@@ -415,10 +471,9 @@ form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar
         mostrarError(filas, columnas, porcent)
 
     } else {
-        let partidas = {ganadas : 0, perdidas : 0} // Cantidad de partidas ganadas y partidas
-        if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exista el registro de las partidas, las obtiene
-            partidas = JSON.parse(localStorage.getItem("partidasPasadas"))
-        }
+        iniciarCronometro()
+
+        partidas = JSON.parse(localStorage.getItem("partidasPasadas")) // Cada vez que se inicia un nuevo juego se accede al registro de partidas ganadas y perdidas
 
         let cartelInicial = document.getElementById("cartelInicial")
         if (cartelInicial != null) {

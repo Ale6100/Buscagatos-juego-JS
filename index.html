@@ -16,22 +16,32 @@
         </div>
 
         <form id="form">
-            <div>
+            <div class="divFi">
                 <p>Filas:</p>
-                <input id="cantFilas" type="number" value="11">
+                <input id="cantFilas" class="cartelInputs" type="number" value="11">
             </div>
 
-            <div>
+            <div class="divCo">
                 <p>Columnas:</p>
-                <input id="cantColumnas" type="number" value="11" step="none">
+                <input id="cantColumnas" class="cartelInputs" type="number" value="11" step="none">
             </div>
 
-            <div>
+            <div class="divGa">
                 <p>Gatos aproximados (%):</p>
-                <input id="dificPorcent" type="number" value="15" required>
+                <input id="dificPorcent" class="cartelInputs" type="number" value="15" required>
+            </div>
+
+            <div class="divCr">
+                <p id="cronometro" class="cartelDatos"></p>
             </div>
 
             <input id="botonIniciarJuego" type="submit" value="Iniciar Juego">
+
+            <div class="divVi">
+                <p>Victorias</p>
+                <p id="victorias" class="cartelDatos"></p>
+            </div>
+
         </form>
     </header>
 

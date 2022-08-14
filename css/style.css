@@ -33,40 +33,68 @@ span {
     color: rgb(128, 64, 0);
 }
 
-#form * {
-    font-size: 1.4rem;
-}
-
 #form {
-    padding: 5px;
+    padding: 5px 0px;
     margin: 15px 1vw;
     width: 98vw;
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-areas:
+    "divFilas      divColumnas   divGatos"
+    "divCronometro inputIniciarJuego divVictorias";
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 10px;
+    justify-items: center;
+    align-items: center;
     border: 2px solid rgb(0, 0, 0);
     border-radius: 5px;
     box-shadow: 2px -2px;
 }
 
+.divFi {
+    grid-area: divFilas;
+}
+
+.divCo {
+    grid-area: divColumnas;
+}
+
+.divCr {
+    grid-area: divCronometro;
+}
+
 div p{
     margin-bottom: 1px;
     font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.divGa {
+    grid-area: divGatos;
+}
+
+.divGa p {
+    font-size: 1.5rem;
 }
 
 input {
     width: 100px;
-    background-color: rgb(0, 0, 255);
-    border: 2px solid black;
-    border-radius: 10px;
-    color: rgb(255, 255, 255);
+    font-size: 1.5rem;
+}
+
+#cronometro {
+    padding: 14px;
 }
 
 #botonIniciarJuego {
+    padding: 14px;
     background-color: rgb(0, 0, 255);
     border: 2px solid black;
+    border-radius: 10px;
     font-size: 1.5rem;
     width: 170px;
     color: rgb(255, 255, 255);
+    grid-area: inputIniciarJuego;
 }
 
 #botonIniciarJuego:hover {
@@ -76,6 +104,25 @@ input {
 
 #botonIniciarJuego:active {
     font-size: 1.4rem;
+}
+
+.divVi {
+    grid-area: divVictorias;
+}
+
+.cartelInputs {
+    color: rgb(15, 15, 240);
+    background-color: rgb(240, 240, 255);
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+}
+
+.cartelDatos {
+    font-weight: normal;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 255);
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
 }
 
 #tablero {
@@ -96,16 +143,14 @@ input {
     box-shadow: 2px -2px;
 }
 
-#cartelInicial p{
-    margin-top: 20px;
-}
 
 #bienvenida {
+    margin-top: 20px;
     font-size: 1.5rem;
 }
 
 #consejosRandom {
-    margin: 10px auto;
+    margin: 10px 1%;
     font-size: 2rem;
 }
 
@@ -163,58 +208,64 @@ img{
 
 /*--- media queries ---*/
 
-@media screen and (max-width: 471px){
-    #form * {
+@media screen and (max-width: 550px){
+    #form {
+        row-gap: 5px;
+    }
+
+    div p {
+        font-size: 1.1rem;
+    }
+    
+    .divGa p {
         font-size: 0.7rem;
     }
 
     input {
-        width: 50px;
-        border-radius: 7px;
-    }
-
-    #botonIniciarJuego {
-        font-size: 0.9rem;
-        width: 90px;
-    }
-
-    #botonIniciarJuego:active {
-        font-size: 0.8rem;
-    }
-
-    #cartelInicial {
+        width: 80px;
         font-size: 1.4rem;
     }
     
-    #bienvenida, #consejosRandom {
+    #cronometro {
+        padding: 7px 5px;
+    }
+
+    #botonIniciarJuego {
+        padding: 7px 1px;
+        font-size: 1.2rem;
+        width: 100px;
+    }
+    
+    #botonIniciarJuego:active {
         font-size: 1rem;
     }
+
+    #cartelInicial {
+        font-size: 1.5rem;
+    }
+    
+    #bienvenida {
+        font-size: 1.2rem;
+    }
+    
+    #consejosRandom {
+        margin: 10px 1%;
+        font-size: 1.2rem;
+    }
+    
+    img{
+        width: 100%;
+    }
+
 }
 
-@media screen and (min-width: 471px) and (max-width: 658px){
-    #form * {
+@media screen and (min-width: 550px) and (max-width: 822px){
+    .divGa p {
         font-size: 1rem;
-    }
+    }    
 
-    input {
-        width: 80px;
-    }
-
-    #botonIniciarJuego {
-        font-size: 1.1rem;
-        width: 110px;
-    }
-
-    #botonIniciarJuego:active {
-        font-size: 1rem;
-    }
-
-    #cartelInicial {
+    #consejosRandom {
         font-size: 1.6rem;
-    }
-    
-    #bienvenida, #consejosRandom {
-        font-size: 1.4rem;
     }
 }
 
