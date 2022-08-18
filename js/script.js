@@ -1,15 +1,5 @@
 "use strict";
 
-const tableroHTML = document.getElementById("tablero")
-
-let datosInputs
-if (localStorage.getItem("datosInputs") != null) { // En caso de que exista información con clave "datosInputs" la agrega a los valores de los inputs
-    datosInputs = JSON.parse(localStorage.getItem("datosInputs")) // Devuelve un objeto js
-    document.getElementById("cantFilas").value = datosInputs.filas
-    document.getElementById("cantColumnas").value = datosInputs.columnas
-    document.getElementById("dificPorcent").value = datosInputs.porcentGatos
-}
-
 function inputIncorrecto(mensajeError, duracionSegundos) { // Agrega un texto distinto según sea el error del input ingresado
     Toastify({
         text: mensajeError,
@@ -32,11 +22,36 @@ function mostrarError(filas, columnas, porcent) {
         inputIncorrecto(`Alto ahí listillo! Se necesita un mínimo de 10 casilleros`, 4)
     
     } else if (filas*columnas > 2500) {
-        inputIncorrecto(`¿En serio quieres ${filas*columnas} casilleros? Para que no forzar a tu computadora se permiten 2500 como máximo`, 6)
+        inputIncorrecto(`¿En serio quieres ${filas*columnas} casilleros? Para no forzar a tu computadora se permiten 2500 como máximo`, 6)
 
     } else { // Se ejecuta si porcent <= 0 || porcent >= 100 ya que es el último caso posible por el cual se ejecutó esta función
         inputIncorrecto(`"Gatos aproximados (%)" establece el porcentaje de gatos aproximado que deseas tener en el tablero, por lo tanto no se permite colocar ${porcent}%`, 8)
     }
+}
+
+function agregarCero(numero) { // Recibe un número y le coloca un cero adelante si es menor que 10
+    return (numero < 10) ? "0"+numero : numero
+}
+
+function iniciarCronometro() {
+    clearInterval(interval)  // Elimina el interval anterior y coloca "00" en el cartel del cronómetro, en caso de que no sea la primera vez que iniciamos el juego
+    cronometro.innerText = "00:00:00"
+    let segundos = 0 // El cronómetro siempre inicia en cero segundos
+    let minutos = 0 
+    let horas = 0
+    interval = setInterval( () => {
+        segundos += 1 // Cada vez que se ejecuta esto, se agrega un segundo
+        if (segundos >= 60) { // Si los segundos superan los 60, entonces vuelven a cero y se agrega un minuto
+            segundos = 0
+            minutos += 1
+        
+            if (minutos >= 60) {
+                minutos = 0
+                horas += 1
+            }
+        }
+        cronometro.innerText = `${agregarCero(horas)}:${agregarCero(minutos)}:${agregarCero(segundos)}`
+    }, 1000)
 }
 
 function crearTableroVacioHTML(filas, columnas) { // Crea un tablero vacío en el HTML
@@ -73,15 +88,13 @@ function crearTableros(filas, columnas) { // Crea ambos tableros
     return crearTableroVacioJuego(filas, columnas)
 }
 
-function mostrarConsejos(){ // Cada vez que se hace un click izquierdo hay un 10% de probabilidades de que se muestre un consejo random abajo del tablero
-    if (Math.random()*100 < 10) { 
-        let arrayConsejos = [
-            `Coloca banderas con click derecho para dejar marcada una posición donde sepas que hay un gato`,
-            `Los casilleros con números indican la cantidad de gatos a su alrededor`,
-            `El primer casillero visible y sus vecinos nunca tendrán un gato`,
-            `No uses tu primer click en los bordes`,
-            `Si estás en móvil o tablet debes mantener el dedo sobre un casillero para simular el click derecho`]
-        consejosRandom.innerText = `Consejo random: ${arrayConsejos[parseInt(Math.random()*arrayConsejos.length)]}`
+function mostrarConsejos(){ // Cada vez que se hace un click izquierdo hay un 10% de probabilidades de que se muestre un consejo random debajo del tablero
+    if (Math.random()*100 < 10) {
+        fetch('./json/data.json') // Accedo al json donde están los consejos
+        .then(response => response.json())
+        .then(arrayConsejos => {
+            consejosRandom.innerText = `Consejo random: ${arrayConsejos[parseInt(Math.random()*arrayConsejos.length)].consejo}` // Accedo a un consejo al azar y lo agrego en la página web
+        })
     } 
 }
 
@@ -295,7 +308,7 @@ function despedida(tablero, filas, columnas, resultado, cantidadDeClicks, partid
     } else { // Alerta especial en caso de haber perdido
         Swal.fire({
             title: 'Te descubrieron! 😔',
-            text: "No te preocupes y vuelve a intentarlo!",
+            text: "No te preocupes y vuelve a intentarlo",
             icon: 'error',
             timer: 4000,
             timerProgressBar: true,
@@ -310,7 +323,7 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
     let cantGatos, primerClickRealizado
     do { // Este do hace que siempre haya por lo menos un gato en el tablero
         cantGatos = 0
-        for (let k=0; k<filas; k++) { // Este for coloca gatos aleatoriamente
+        for (let k=0; k<filas; k++) { // Este for coloca porcent% de gatos aproximadamente
             for (let l=0; l<columnas; l++) {
                 if (Math.random()*100 < porcent) {
                     tablero[k][l].gato = true
@@ -414,53 +427,31 @@ function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cant
     return [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado]  // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
 }
 
-function agregarCero(numero) { // Recibe un número en formato string y le coloca un cero adelante si es menor que 10
-    let res = numero
-    if (parseInt(numero) < 10) {
-        res = "0" + res
-    }
-    return res
-}
+const tableroHTML = document.getElementById("tablero")
 
-function iniciarCronometro() {
-    clearInterval(interval)  // Elimina el interval anterior y coloca "00" en el cartel del cronómetro, en caso de que no sea la primera vez que iniciamos el juego
-    cronometro.innerText = "00:00:00"
-    let segundos = 0 // El cronómetro siempre inicia en cero segundos
-    let minutos = 0 
-    let horas = 0
-    interval = setInterval( () => {
-        segundos += 1 // Cada vez que se ejecuta esto, se agrega un segundo
-        if (segundos >= 60) { // Si los segundos superan los 60, entonces los segundos vuelven a cero y se agrega un minuto
-            segundos = 0
-            minutos += 1
-        }
-        if (minutos >= 60) {
-            minutos = 0
-            horas += 1
-        }
-        cronometro.innerText = `${agregarCero(horas)}:${agregarCero(minutos)}:${agregarCero(segundos)}`
-    }, 1000)
+let datosInputs, interval, partidas
+
+if (localStorage.getItem("datosInputs") != null) { // En caso de que exista información con clave "datosInputs" la agrega a los valores de los inputs
+    datosInputs = JSON.parse(localStorage.getItem("datosInputs")) // Devuelve un objeto js
+    document.getElementById("cantFilas").value = datosInputs.filas
+    document.getElementById("cantColumnas").value = datosInputs.columnas
+    document.getElementById("dificPorcent").value = datosInputs.porcentGatos
 }
 
 const cronometro = document.getElementById("cronometro")
-cronometro.innerText = "00:00:00"
-
-let interval, partidas
 
 const victorias = document.getElementById("victorias") 
 
-if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exista el registro de las partidas, las obtiene
+if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exista el registro de las partidas pasadas, usa esos datos para escribir el porcentaje de victorias en el texto de la etiqueta con id "victorias"
     partidas = JSON.parse(localStorage.getItem("partidasPasadas"))
     victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
-} else { // Si no hay un registro, lo crea
-    partidas = {ganadas : 0, perdidas : 0} // Cantidad de partidas ganadas y partidas por defecto
-    localStorage.setItem("partidasPasadas", JSON.stringify(partidas))
+} else { // Si no hay un registro de partidas pasadas, escribe 0%
     victorias.innerText = "0%"
 }
 
 const form = document.getElementById("form")
 
-form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar Juego"
+form.addEventListener("submit", (e) => { // El juego inicia (y se reinicia) una vez que apretamos en "INICIAR"
     e.preventDefault() // Primero prevengo que haga lo que por defecto está hecho para hacer. Prevengo que actualice la página
 
     const filas = document.getElementById("cantFilas").value // Obtengo los valores de los inputs
@@ -471,18 +462,21 @@ form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar
         mostrarError(filas, columnas, porcent)
 
     } else {
-        iniciarCronometro()
+        iniciarCronometro() // Cada vez que se inicia una nueva partida inicia el cronómetro
 
+        let datosInputs = new InputsPasados(filas, columnas, porcent)    // Creo un objeto con los valores actuales de los inputs
+        localStorage.setItem("datosInputs", JSON.stringify(datosInputs)) // Esto guarda los valores de los inputs (deben ser inputs válidos, por eso están en el else) para la siguiente vez que se quiera abrir la página
+
+        if (localStorage.getItem("partidasPasadas") == null) { // Si no hay un registro de las partidas pasadas, lo crea
+            localStorage.setItem("partidasPasadas", JSON.stringify({ganadas : 0, perdidas : 0})) // Cantidad de partidas ganadas y perdidas por defecto
+        } 
         partidas = JSON.parse(localStorage.getItem("partidasPasadas")) // Cada vez que se inicia un nuevo juego se accede al registro de partidas ganadas y perdidas
-
+        
         let cartelInicial = document.getElementById("cartelInicial")
         if (cartelInicial != null) {
             cartelInicial.remove() // Elimino el cartel incial 
         }
 
-        let datosInputs = new InputsPasados(filas, columnas, porcent)    // Creo un objeto con los valores actuales de los inputs
-        localStorage.setItem("datosInputs", JSON.stringify(datosInputs)) // Esto guarda los valores de los inputs (deben ser inputs válidos, por eso están en el else) para la siguiente vez que se quiera abrir la página
-        
         const tablero = crearTableros(filas, columnas) // Creo los tableros según la cantidad de filas y columnas en los inputs
         let primerClickRealizado = false // Establezco que todavía no se hizo el primer click en el tablero
         let juegoTerminado = false       // Se va a convertir a true cuando el juego haya termnado
@@ -495,7 +489,7 @@ form.addEventListener("submit", (e) => { // Le creo un evento al botón "Iniciar
             for (let j=0; j<columnas; j++) { 
                 const casillero = document.getElementById(`fila-${i+1}-columna-${j+1}`)
 
-                casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en un casillero cualquiera (en particular, en tablero[i][j])
+                casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en el casillero tablero[i][j]
                     [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
                 })
 

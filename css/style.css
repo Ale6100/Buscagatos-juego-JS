@@ -34,9 +34,8 @@ span {
 }
 
 #form {
-    padding: 5px 0px;
-    margin: 15px 1vw;
-    width: 98vw;
+    margin: 5px 1% 0px 1%;
+    width: 98%;
     display: grid;
     grid-template-areas:
     "divFilas      divColumnas   divGatos"
@@ -48,7 +47,7 @@ span {
     align-items: center;
     border: 2px solid rgb(0, 0, 0);
     border-radius: 5px;
-    box-shadow: 2px -2px;
+    box-shadow: 2px -2px 2px;
 }
 
 .divFi {
@@ -83,11 +82,11 @@ input {
 }
 
 #cronometro {
-    padding: 14px;
+    padding: 10px 14px;
 }
 
 #botonIniciarJuego {
-    padding: 14px;
+    padding: 10px 14px;
     background-color: rgb(0, 0, 255);
     border: 2px solid black;
     border-radius: 10px;
@@ -110,6 +109,10 @@ input {
     grid-area: divVictorias;
 }
 
+.divVi p {
+    font-size: 1.3rem;
+}
+
 .cartelInputs {
     color: rgb(15, 15, 240);
     background-color: rgb(240, 240, 255);
@@ -130,17 +133,17 @@ input {
     margin: auto;
     user-select: none;
     font-weight: bold;
-    box-shadow: 2px -2px;
+    box-shadow: 2px -2px 2px;
 }
 
 #cartelInicial {
     padding: 20px;
-    margin: 15px 5vw;
-    width: 90vw;
+    margin: 15px 5%;
+    width: 90%;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 10px;
     font-size: 2rem;
-    box-shadow: 2px -2px;
+    box-shadow: 2px -2px 2px;
 }
 
 
@@ -150,6 +153,7 @@ input {
 }
 
 #consejosRandom {
+    height: 100px;
     margin: 10px 1%;
     font-size: 2rem;
 }
@@ -208,7 +212,21 @@ img{
 
 /*--- media queries ---*/
 
-@media screen and (max-width: 550px){
+@media screen and (max-width: 837px){
+    .divGa p {
+        font-size: 1rem;
+    }    
+
+    #consejosRandom {
+        font-size: 1.6rem;
+    }
+}
+
+@media screen and (max-width: 565px){
+    h1 {
+        font-size: 2.1rem;
+    }
+
     #form {
         row-gap: 5px;
     }
@@ -219,6 +237,10 @@ img{
     
     .divGa p {
         font-size: 0.7rem;
+    }
+
+    .divVi p {
+        font-size: 0.9rem;
     }
 
     input {
@@ -232,12 +254,12 @@ img{
 
     #botonIniciarJuego {
         padding: 7px 1px;
-        font-size: 1.2rem;
+        font-size: 1rem;
         width: 100px;
     }
     
     #botonIniciarJuego:active {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     #cartelInicial {
@@ -259,13 +281,9 @@ img{
 
 }
 
-@media screen and (min-width: 550px) and (max-width: 822px){
+@media screen and (max-width: 402px){
     .divGa p {
-        font-size: 1rem;
-    }    
-
-    #consejosRandom {
-        font-size: 1.6rem;
+        font-size: 0.6rem;
     }
 }
 

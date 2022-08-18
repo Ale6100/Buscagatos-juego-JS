@@ -10,9 +10,8 @@ class Casillero { // Clase que crea casilleros
 
     visibleTexto(tablero, i, j, casillero) { // Hace que un casillero pase a estar descubierto
         tablero[i][j].noVisibleBandera(tablero, i, j, casillero)
-        casillero.classList.remove("casilleroOculto")
         casillero.children[0].classList.remove("textoOculto")
-        casillero.classList.add("visibleTexto")
+        casillero.classList.replace("casilleroOculto", "visibleTexto")
         tablero[i][j].estado = "visible"
     }
 
