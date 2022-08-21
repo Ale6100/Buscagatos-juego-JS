@@ -20,13 +20,13 @@ header {
     margin-bottom: 20px;
 }
 
+h1 {
+    font-size: 2.5rem;
+}
+
 a {
     text-decoration: none;
     color: rgb(0, 0, 0);
-}
-
-h1 {
-    font-size: 2.5rem;
 }
 
 span {
@@ -157,11 +157,18 @@ input {
     font-size: 1.8rem;
 }
 
-img{
-    width: 100%;
+#creditos {
+    position: fixed;
+    right: 2vw;
+    bottom: 1vh;
+    transition: transform 0.5s;
 }
 
-/*--- C lases para los casilleros ---*/
+#creditos:hover {
+    transform: scale(1.1);
+}
+
+/*--- Clases para los casilleros ---*/
 
 .casilleroOculto { /*Clase que viene por defecto en todos los casilleros*/
     height: 2rem;
@@ -176,7 +183,7 @@ img{
     font-size: 1rem;
     border: 1px solid rgb(0, 0, 0);
     background-color: rgb(0, 0, 255);
-    transition: background-color 0.3s;
+    transition: background-color 0.35s;
 }
 
 .colorVerde {
@@ -209,6 +216,10 @@ img{
     background-color: rgb(0, 255, 0);
 }
 
+img{
+    width: 100%;
+}
+
 /*--- Media queries ---*/
 
 @media screen and (min-width: 565px) and (max-width: 837px){
@@ -218,6 +229,10 @@ img{
 
     #consejosRandom {
         font-size: 1.6rem;
+    }
+
+    #creditos {
+        font-size: 0.8rem;
     }
 }
 
@@ -272,6 +287,10 @@ img{
     #consejosRandom {
         margin: 10px 1%;
         font-size: 1.2rem;
+    }
+
+    #creditos {
+        font-size: 0.7rem;
     }
 }
 

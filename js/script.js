@@ -371,11 +371,12 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
 }
 
 function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas) { // Comportamiento del click izquierdo sobre la ubicación tablero[i, j] del tablero
-    cantidadDeClicks += 1
     if (primerClickRealizado == false) { // Esto se ejecuta a la hora de hacer el primer click sobre el tablero
+        cantidadDeClicks += 1;
         [cantGatos, primerClickRealizado, juegoTerminado] = primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, partidas)
 
-    } else if (juegoTerminado == false) { // Esto se ejecuta si en el click anterior no se terminó el juego
+    } else if (juegoTerminado == false && tablero[i][j].estado == "oculto") { // Esto se ejecuta si en el click anterior no se terminó el juego, y si estamos presionando sobre un casillero oculto
+        cantidadDeClicks += 1
         mostrarConsejos()
         tablero[i][j].visibleTexto(tablero, i, j, casillero)
 
@@ -462,19 +463,21 @@ form.addEventListener("submit", (e) => { // El juego inicia (y se reinicia) una 
         const consejosRandom = document.getElementById(`consejosRandom`)
         consejosRandom.innerText = ""
 
-        for (let i=0; i<filas; i++) {
-            for (let j=0; j<columnas; j++) {
+        tablero.forEach( (fila, i) => {
+            fila.forEach( (bloque, j) => {
                 const casillero = document.getElementById(`fila-${i+1}-columna-${j+1}`)
 
-                casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en el casillero tablero[i][j]
-                    [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
+                casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en un casillero ("tablero[i][j]"" es lo mismo que "bloque")
+                    if (bloque.bandera == false) {
+                        [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
+                    }
                 })
 
                 casillero.addEventListener("contextmenu", (e) => { // Código para agregar o quitar banderas
                     e.preventDefault()
                     clickDerecho(tablero, i, j, casillero, juegoTerminado)
                 })
-            }
-        }
+            })
+        })
     }
 })

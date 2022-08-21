@@ -36,7 +36,7 @@
     },
 
     {
-        "consejo" : "¿Deseas reiniciar el porcentaje de victorias? Elije la opción \"Eliminar registro\" la siguiente vez que ganes el juego"
+        "consejo" : "¿Deseas reiniciar el porcentaje de victorias? Elije la opción \"Eliminar registro\" la próxima vez que ganes el juego"
     },
 
     {
@@ -45,5 +45,9 @@
 
     {
         "consejo" : "Se recomienda utilizar 11 filas y columnas"
+    },
+
+    {
+        "consejo" : "Coloca banderas! Te ayudarán a recordar la ubicación de los gatos y a no presionar accidentalmente sobre ellos"
     }
 ]
