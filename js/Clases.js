@@ -1,6 +1,6 @@
 "use strict";
 
-class Casillero { // Clase que crea casilleros
+class Casillero { // Clase que crea objetos que representan a los casilleros
     constructor() {
         this.estado = "oculto" // "oculto" o "visible"
         this.gato = false   // sin gato o con gato (false o true)

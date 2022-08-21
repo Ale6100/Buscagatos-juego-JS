@@ -6,7 +6,7 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-head {
+html {
     font-size: 16px;
 }
 
@@ -38,7 +38,7 @@ span {
     width: 98%;
     display: grid;
     grid-template-areas:
-    "divFilas      divColumnas   divGatos"
+    "divFilas      divColumnas       divGatos"
     "divCronometro inputIniciarJuego divVictorias";
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
@@ -58,6 +58,10 @@ span {
     grid-area: divColumnas;
 }
 
+.divGa {
+    grid-area: divGatos;
+}
+
 .divCr {
     grid-area: divCronometro;
 }
@@ -66,10 +70,6 @@ div p{
     margin-bottom: 1px;
     font-weight: bold;
     font-size: 1.5rem;
-}
-
-.divGa {
-    grid-area: divGatos;
 }
 
 .divGa p {
@@ -87,18 +87,18 @@ input {
 
 #botonIniciarJuego {
     padding: 10px 14px;
-    background-color: rgb(0, 0, 255);
-    border: 2px solid black;
-    border-radius: 10px;
-    font-size: 1.5rem;
     width: 170px;
     color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 255);
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    font-size: 1.5rem;
     grid-area: inputIniciarJuego;
 }
 
 #botonIniciarJuego:hover {
-    background-color: rgb(150, 150, 255);
     color: rgb(0, 0, 0);
+    background-color: rgb(150, 150, 255);
 }
 
 #botonIniciarJuego:active {
@@ -129,10 +129,10 @@ input {
 }
 
 #tablero {
-    border: 1px solid rgb(0, 0, 0);
     margin: auto;
     user-select: none;
     font-weight: bold;
+    border: 1px solid rgb(0, 0, 0);
     box-shadow: 2px -2px 2px;
 }
 
@@ -140,12 +140,11 @@ input {
     padding: 20px;
     margin: 15px 5%;
     width: 90%;
+    font-size: 2rem;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 10px;
-    font-size: 2rem;
     box-shadow: 2px -2px 2px;
 }
-
 
 #bienvenida {
     margin-top: 20px;
@@ -153,16 +152,16 @@ input {
 }
 
 #consejosRandom {
+    margin: 10px 1% 0px 1%;
     height: 100px;
-    margin: 10px 1%;
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 img{
     width: 100%;
 }
 
-/*--- clases para los casilleros ---*/
+/*--- C lases para los casilleros ---*/
 
 .casilleroOculto { /*Clase que viene por defecto en todos los casilleros*/
     height: 2rem;
@@ -172,9 +171,9 @@ img{
 }
 
 .visibleTexto {
-    font-size: 1rem;
     height: 2rem;
     width: 2rem;
+    font-size: 1rem;
     border: 1px solid rgb(0, 0, 0);
     background-color: rgb(0, 0, 255);
     transition: background-color 0.3s;
@@ -210,9 +209,9 @@ img{
     background-color: rgb(0, 255, 0);
 }
 
-/*--- media queries ---*/
+/*--- Media queries ---*/
 
-@media screen and (max-width: 837px){
+@media screen and (min-width: 565px) and (max-width: 837px){
     .divGa p {
         font-size: 1rem;
     }    
@@ -239,26 +238,26 @@ img{
         font-size: 0.7rem;
     }
 
-    .divVi p {
-        font-size: 0.9rem;
-    }
-
     input {
         width: 80px;
         font-size: 1.4rem;
     }
-    
+
     #cronometro {
         padding: 7px 5px;
     }
 
     #botonIniciarJuego {
         padding: 7px 1px;
-        font-size: 1rem;
         width: 100px;
+        font-size: 1rem;
     }
     
     #botonIniciarJuego:active {
+        font-size: 0.9rem;
+    }
+
+    .divVi p {
         font-size: 0.9rem;
     }
 
@@ -274,11 +273,6 @@ img{
         margin: 10px 1%;
         font-size: 1.2rem;
     }
-    
-    img{
-        width: 100%;
-    }
-
 }
 
 @media screen and (max-width: 402px){

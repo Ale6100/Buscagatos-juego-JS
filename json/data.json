@@ -21,5 +21,29 @@
 
     {
         "consejo" : "Si no hay un claro casillero donde apretar, siempre puedes calcular cuál será el menos peligroso"
+    },
+
+    {
+        "consejo" : "No hagas un tablero con demasiadas columnas! Si quieres uno grande coloca muchas filas"
+    },
+
+    {
+        "consejo" : "No pidas un tablero muy pequeño. Hará que el porcentaje de gatos sea notablemente distinto al pedido"
+    },
+
+    {
+        "consejo" : "El porcentaje de gatos recomendado está entre el 15% y 20%"
+    },
+
+    {
+        "consejo" : "¿Deseas reiniciar el porcentaje de victorias? Elije la opción \"Eliminar registro\" la siguiente vez que ganes el juego"
+    },
+
+    {
+        "consejo" : "Utiliza el cronómetro para desafiarte a ti mismo"
+    },
+
+    {
+        "consejo" : "Se recomienda utilizar 11 filas y columnas"
     }
 ]
