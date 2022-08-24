@@ -17,7 +17,7 @@ body, main{
 }
 
 header {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 h1 {
@@ -76,6 +76,10 @@ div p{
     font-size: 1.5rem;
 }
 
+#dificPorcent {
+    position: relative;
+}
+
 input {
     width: 100px;
     font-size: 1.5rem;
@@ -93,6 +97,7 @@ input {
     border: 2px solid rgb(0, 0, 0);
     border-radius: 10px;
     font-size: 1.5rem;
+    font-weight: bold;
     grid-area: inputIniciarJuego;
 }
 
@@ -102,7 +107,8 @@ input {
 }
 
 #botonIniciarJuego:active {
-    font-size: 1.4rem;
+    background-color: rgb(240, 240, 255);
+    transform: scale(0.95);
 }
 
 .divVi {
@@ -154,7 +160,7 @@ input {
 #consejosRandom {
     margin: 10px 1% 0px 1%;
     height: 100px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
 }
 
 #creditos {
@@ -170,23 +176,23 @@ input {
 
 /*--- Clases para los casilleros ---*/
 
-.casilleroOculto { /*Clase que viene por defecto en todos los casilleros*/
+.casilleroOculto { /* Clase que viene por defecto en todos los casilleros */
     height: 2rem;
     width: 2rem;
     border: 1px solid rgb(0, 0, 0);
     background-color: rgb(127, 127, 127);
 }
 
-.visibleTexto {
+.visibleTexto { /* Clase para los casilleros descubiertos sin gato */
     height: 2rem;
     width: 2rem;
-    font-size: 1rem;
     border: 1px solid rgb(0, 0, 0);
     background-color: rgb(0, 0, 255);
+    font-size: 1rem;
     transition: background-color 0.35s;
 }
 
-.colorVerde {
+.colorVerde { /* Colores de los números */
     color: rgb(0, 255, 0);
 }
 
@@ -202,18 +208,16 @@ input {
     font-size: 0px;
 }
 
-.colorPerdedorFondo {
-    height: 2rem;
-    width: 2rem;
-    border: 1px solid rgb(0, 0, 0);
+.colorPerdedorFondo { /* Clase para los casilleros con gato si se perdió el juego */
     background-color: rgb(255, 50, 50);
 }
 
 .colorGanadorFondo {
-    height: 2rem;
-    width: 2rem;
-    border: 1px solid rgb(0, 0, 0);
-    background-color: rgb(0, 255, 0);
+    background-color: rgb(0, 155, 0);
+}
+
+.colorMarcado { /* Clase para el gato que seleccionamos cuando perdemos */
+    background-color: rgb(0, 0, 0);
 }
 
 img{
@@ -225,10 +229,14 @@ img{
 @media screen and (min-width: 565px) and (max-width: 837px){
     .divGa p {
         font-size: 1rem;
-    }    
+    }
+
+    #dificPorcent {
+        top: 4px;
+    }
 
     #consejosRandom {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
     }
 
     #creditos {
@@ -251,6 +259,10 @@ img{
     
     .divGa p {
         font-size: 0.7rem;
+    }
+
+    #dificPorcent {
+        top: 3px;
     }
 
     input {
@@ -298,10 +310,15 @@ img{
     .divGa p {
         font-size: 0.6rem;
     }
+
+    #dificPorcent {
+        top: 4px;
+    }
 }
 
-@media screen and (min-width: 716px){
+@media screen and (min-width: 720px){
     td:hover {
-        opacity: 0.2;
+        opacity: 0.9;
+        border: 1px solid rgb(0, 255, 255);
     }
 }

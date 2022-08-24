@@ -49,5 +49,9 @@
 
     {
         "consejo" : "Coloca banderas! Te ayudarán a recordar la ubicación de los gatos y a no presionar accidentalmente sobre ellos"
+    },
+
+    {
+        "consejo" : "Si estás perdiendo muy seguido puedes disminuir el porcentaje de gatos aproximado"
     }
 ]
