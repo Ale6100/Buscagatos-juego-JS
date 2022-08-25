@@ -324,7 +324,7 @@ function despedida(tablero, resultado, cantidadDeClicks, partidas, porcent) { //
             }
         })
     })
-    let inputsOriginales = tablero.length == 11 && tablero[0].length == 12 && porcent == 15 // Devuelve true si los inputs colocados son los que vienen por defecto
+    let inputsOriginales = tablero.length == 11 && tablero[0].length == 11 && porcent == 15 // Devuelve true si los inputs colocados son los que vienen por defecto
     alertasEspeciales(resultado, cantidadDeClicks, partidas, inputsOriginales)
 
     let juegoTerminado = true
