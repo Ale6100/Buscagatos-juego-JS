@@ -31,7 +31,7 @@ function mostrarError(filas, columnas, porcent) { // Muestra un cartel con un te
         inputIncorrecto(`¿En serio quieres ${filas*columnas} casilleros? Para no forzar a tu dispositivo se permiten 2500 como máximo`, 7)
 
     } else { // Se ejecuta si porcent <= 0 || porcent >= 100 ya que es el último caso posible por el cual se ejecutó esta función
-        inputIncorrecto(`"Gatos aproximados (%)" establece el porcentaje de gatos aproximado que deseas tener en el tablero, por lo tanto no se permite colocar ${porcent}%`, 9)
+        inputIncorrecto(`"Gatos aproximados (%)" establece el porcentaje de gatos aproximado que deseas tener en el tablero. Por tal motivo no se permite colocar ${porcent}%`, 9)
     }
 }
 
@@ -40,11 +40,9 @@ function agregarCero(numero) { // Recibe un número y le coloca un cero a la izq
 }
 
 function iniciarCronometro() {
-    clearInterval(interval)  // Estas dos líneas detienen el cronómetro y colocan "00:00:00" en el cartel del cronómetro. Sirve en caso de que no sea la primera vez que iniciamos el juego
+    clearInterval(interval)  // Estas dos líneas detienen el cronómetro y colocan "00:00:00" en su cartel correspondiente. Sirve en caso de que no sea la primera vez que iniciamos el juego
     cronometro.innerText = "00:00:00"
-    let segundos = 0
-    let minutos = 0
-    let horas = 0
+    let segundos = 0, minutos = 0, horas = 0
     interval = setInterval( () => { // Cada vez que se ejecuta esto, se agrega un segundo
         segundos += 1
         if (segundos == 60) { // Si los segundos llegan a 60, entonces vuelven a cero y se agrega un minuto
@@ -60,7 +58,7 @@ function iniciarCronometro() {
     }, 1000)
 }
 
-function crearTableroVacioHTML(filas, columnas) { // Crea un tablero vacío en el HTML
+function crearTableroVacioHTML(filas, columnas) {
     tableroHTML.innerHTML = ""                    // Primero vacío el tablero, en caso de que estemos iniciando una nueva partida
     for (let i=0; i<filas; i++) {
         const filai = document.createElement("tr"); // Creo la cantidad de filas pedidas mediante etiquetas tr
@@ -101,13 +99,13 @@ async function mostrarConsejos(){ // Cada vez que se hace click izquierdo sobre 
             const data = await response.json()
             consejosRandom.innerText = `Consejo random: ${data[parseInt(Math.random()*data.length)].consejo}` // Accedo a un consejo al azar y lo agrego en la página web
         } catch {
-            console.error("Error! Para utilizar esta página correctamente debes ejecutar el código desde un servidor. Te recomiendo la extensión Live Server en caso de que uses Visual Studio Code")
+            console.error("Error! Para utilizar este sitio correctamente debes ejecutar el proyecto desde un servidor. Te recomiendo la extensión Live Server en caso de que uses Visual Studio Code o visitar la última versión oficial en https://buscagatos.netlify.app")
         }
     }
 }
 
 function perteneceAlTablero(filas, columnas, i, j) { // Devuelve true si tablero[i][j] pertenece al tablero. Lo uso para evitar errores a la hora de analizar los bordes
-    return (i < 0 || j < 0 || i >= filas || j >= columnas) ? false : true
+    return i >= 0 && j >= 0 && i < filas && j < columnas
 }
 
 function analizarCasillerosVecinos(tablero, i, j) { // Recibe un tablero y una ubicación. Dicha ubicación será en un casillero sin gato. La función devuelve su cantidad de gatos vecinos
@@ -124,8 +122,7 @@ function analizarCasillerosVecinos(tablero, i, j) { // Recibe un tablero y una u
 }
 
 function definirParametrosIniciales(direccion) { // Define el n y m inicial que van a usar las funciones expandirLinea y expandirLineaRama
-    let n = 0
-    let m = 0
+    let n = 0, m = 0
     if (direccion == "arriba") {
         n = -1
     } else if (direccion == "abajo") {
@@ -141,8 +138,7 @@ function definirParametrosIniciales(direccion) { // Define el n y m inicial que 
 }
 
 function expandirLinea(tablero, i, j, direccion) { // Esta función expande arriba, abajo, derecha o izquierda el área cuando se hace un click izquierdo sobre un casillero oculto sin gatos y sin gatos a su alrededor
-    let n, m
-    [n, m] = definirParametrosIniciales(direccion)
+    let [n, m] = definirParametrosIniciales(direccion)
     const cambioN = n
     const cambioM = m
     let repetir = true
@@ -170,13 +166,12 @@ function expandirLinea(tablero, i, j, direccion) { // Esta función expande arri
 }
 
 function expandirLineaRama(tablero, i, j, direccion) { // Esta función sirve para expandir de una forma similar a la de arriba pero en ubicaciones distintas a la rama original, logrando una expansión grande
-    let n, m
-    [n, m] = definirParametrosIniciales(direccion)
+    let [n, m] = definirParametrosIniciales(direccion)
     const cambioN = n
     const cambioM = m
     let primerIfEjecutado = false // Esto sirve para controlar que la expansión siempre llegue a las esquinas del área a expandir
     if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
-        if (tablero[i+n][j+m].gatosVecinos == ""){
+        if (tablero[i+n][j+m].gatosVecinos == "") {
             primerIfEjecutado = true
         } else { // Esto se va a ejecutar si en tablero[i+n][j+m] hay gatos vecinos, aunque también haya en tablero[i+n-cambioN][j+m-cambioM]
             tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
@@ -324,16 +319,14 @@ function despedida(tablero, resultado, cantidadDeClicks, partidas, porcent) { //
             }
         })
     })
-    let inputsOriginales = tablero.length == 11 && tablero[0].length == 11 && porcent == 15 // Devuelve true si los inputs colocados son los que vienen por defecto
+    let inputsOriginales = tablero.length == 11 && tablero[0].length == 11 && porcent == 15 // Devuelve true si los inputs colocados son los que vienen por defecto en el index.html
     alertasEspeciales(resultado, cantidadDeClicks, partidas, inputsOriginales)
-
-    let juegoTerminado = true
     clearInterval(interval)
-    return juegoTerminado
+    return true
 }
 
 function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, partidas) { // Comportamiento del primer click izquierdo sobre el tablero. El primer click es especial
-    let cantGatos, primerClickRealizado
+    let cantGatos
     do { // Este do...while hace que siempre haya por lo menos un gato en el tablero
         cantGatos = 0
         tablero.forEach( (fila) => { // Recorro el tablero y pido que cada casillero tenga un porcent% de probabilidades de que haya un gato
@@ -395,8 +388,7 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
         juegoTerminado = despedida(tablero, "ganar", cantidadDeClicks, partidas, porcent)
     }
 
-    primerClickRealizado = true
-    return [cantGatos, primerClickRealizado, juegoTerminado] // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
+    return [cantGatos, true, juegoTerminado] // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
 }
 
 function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas) { // Comportamiento del click izquierdo sobre la ubicación tablero[i, j] del tablero
@@ -413,13 +405,13 @@ function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cant
             juegoTerminado = despedida(tablero, "perder", cantidadDeClicks, partidas, porcent)
             casillero.classList.add("colorMarcado")
 
-        } else if(tablero[i][j].gatosVecinos == "") { // Esto se ejecuta si hicimos click sobre un casillero sin gatos y sin gatos alrededor
+        } else if(tablero[i][j].gatosVecinos == "") { // Esto se ejecuta si hicimos click sobre un casillero sin gatos y sin gatos a su alrededor
             expandirArea(tablero, i, j)
             if (juegoGanado(tablero, filas, columnas, cantGatos)) {
                 juegoTerminado = despedida(tablero, "ganar", cantidadDeClicks, partidas, porcent)
             }
 
-        } else { // Esto se ejecuta si hicimos click sobre un casillero sin gatos pero con gatos alrededor
+        } else { // Esto se ejecuta si hicimos click sobre un casillero sin gatos pero con gatos a su alrededor
             casillero.classList.remove("textoOculto")
             casillero.classList.remove("casilleroOculto")
             if (juegoGanado(tablero, filas, columnas, cantGatos)) {
