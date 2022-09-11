@@ -121,99 +121,31 @@ function analizarCasillerosVecinos(tablero, i, j) { // Recibe un tablero y una u
     return cantidadDeGatosVecinos
 }
 
-function definirParametrosIniciales(direccion) { // Define el n y m inicial que van a usar las funciones expandirLinea y expandirLineaRama
-    let n = 0, m = 0
-    if (direccion == "arriba") {
-        n = -1
-    } else if (direccion == "abajo") {
-        n = 1
-    }
-
-    if (direccion == "izquierda") {
-        m = -1
-    } else if (direccion == "derecha") {
-        m = 1
-    }
-    return [n, m]
-}
-
-function expandirLinea(tablero, i, j, direccion) { // Esta función expande arriba, abajo, derecha o izquierda el área cuando se hace un click izquierdo sobre un casillero oculto sin gatos y sin gatos a su alrededor
-    let [n, m] = definirParametrosIniciales(direccion)
-    const cambioN = n
-    const cambioM = m
-    let repetir = true
-    do {
-        if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
-            if (tablero[i+n][j+m].gatosVecinos != "") { // Si el siguiente casillero tiene gatos vecinos, entonces el while no se reinicia
-                repetir = false
+function expandirArea(tablero, i, j) { // Esta función expande el área de un casillero y sus vecinos sin bandera cuando se hace analiza un casillero que no tiene gatos ni gatos a su alrededor
+    for (let n=-1; n<=1; n++) {
+        for (let m=-1; m<=1; m++) {
+            if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
+                if (tablero[i+n][j+m].bandera == false) {
+                    if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && tablero[i+n][j+m].estado == "oculto")  {
+                        expandirArea(tablero, i+n, j+m)
+                    }
+                    tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
+                }
             }
-
-            tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
-
-            if (direccion == "arriba" || direccion == "abajo") {
-                expandirLineaRama(tablero, i+n, j, "izquierda") // Expande a la izquierda y derecha del casillero tablero[i+n][j], en caso de que en la rama principal estemos expandiendo arriba o abajo
-                expandirLineaRama(tablero, i+n, j, "derecha")
-                n += cambioN
-            } else {
-                expandirLineaRama(tablero, i, j+m, "arriba")
-                expandirLineaRama(tablero, i, j+m, "abajo")
-                m += cambioM
-            }
-        } else {
-            repetir = false
-        }
-    } while (repetir)
-}
-
-function expandirLineaRama(tablero, i, j, direccion) { // Esta función sirve para expandir de una forma similar a la de arriba pero en ubicaciones distintas a la rama original, logrando una expansión grande
-    let [n, m] = definirParametrosIniciales(direccion)
-    const cambioN = n
-    const cambioM = m
-    let primerIfEjecutado = false // Esto sirve para controlar que la expansión siempre llegue a las esquinas del área a expandir
-    if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
-        if (tablero[i+n][j+m].gatosVecinos == "") {
-            primerIfEjecutado = true
-        } else { // Esto se va a ejecutar si en tablero[i+n][j+m] hay gatos vecinos, aunque también haya en tablero[i+n-cambioN][j+m-cambioM]
-            tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
-        }
-    }
-    while (tablero[i+n-cambioN][j+m-cambioM].gatosVecinos == "") { // Si el casillero actual no tiene gatos vecinos, entonces el while se reinicia
-        if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
-            (primerIfEjecutado == true) && (tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`)))
-        }
-        primerIfEjecutado = true
-
-        if (direccion == "arriba" || direccion == "abajo") {
-            if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+1)) {
-                (tablero[i+n][j+1].estado != "visible") && (expandirLineaRama(tablero, i+n, j, "derecha"))
-            }
-
-            if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j-1)) {
-                (tablero[i+n][j-1].estado != "visible") && (expandirLineaRama(tablero, i+n, j, "izquierda"))
-            }
-            n += cambioN
-        } else {
-            if (perteneceAlTablero(tablero.length, tablero[0].length, i+1, j+m)) {
-                (tablero[i+1][j+m].estado != "visible") && (expandirLineaRama(tablero, i, j+m, "abajo"))
-            }
-    
-            if (perteneceAlTablero(tablero.length, tablero[0].length, i-1, j+m)) {
-                (tablero[i-1][j+m].estado != "visible") && (expandirLineaRama(tablero, i, j+m, "arriba"))
-            }
-            m += cambioM
-        }
-
-        if (!(perteneceAlTablero(tablero.length, tablero[0].length, i+n-cambioN, j+m-cambioM))) {
-            break // Si el casillero tablero[i+n-cambio, j+m-cambioM] no pertenece al tablero, entonces no necesito reiniciar el while
         }
     }
 }
 
-function expandirArea(tablero, i, j) { // Las funciones expandirLinea y expandirLineaRama trabajan juntas para expandir correctamente el área cuando se hace click sobre un casillero que no tiene gatos ni gatos a su alrededor
-    expandirLinea(tablero, i, j, "arriba")
-    expandirLinea(tablero, i, j, "abajo")
-    expandirLinea(tablero, i, j, "izquierda")
-    expandirLinea(tablero, i, j, "derecha")
+function expandirAreaPrimerClick(tablero, i, j) { // Esta función expande el área cuando se hace el primer click. Recordemos que dicho casillero será visible y no habrá ningún gato, al igual que sus vecinos sin bandera
+    for (let n=-1; n<=1; n++) {
+        for (let m=-1; m<=1; m++) {
+            if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
+                if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && (tablero[i+n][j+m].bandera == false))  {
+                    expandirArea(tablero, i+n, j+m)
+                } 
+            }
+        }
+    }
 }
 
 function juegoGanado(tablero, filas, columnas, cantGatos) { // Devuelve true si ganamos el juego
@@ -338,13 +270,16 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
             })
         })
 
-        for (let n=-1; n<=1; n++) { // Hago que tanto el primer casillero descubierto como sus vecinos no tengan gato y sean visibles
+        for (let n=-1; n<=1; n++) { // Hago que tanto el primer casillero descubierto como sus vecinos no tengan gato. También pido que sean visibles siempre y cuando no tengan bandera
             for (let m=-1; m<=1; m++) {
                 if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
-                    tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, casillero)
                     if (tablero[i+n][j+m].gato == true) {
                         tablero[i+n][j+m].gato = false
                         cantGatos -= 1
+                    }
+
+                    if (tablero[i+n][j+m].bandera == false) {
+                        tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
                     }
                 }
             }
@@ -372,7 +307,7 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
             }
         })
     })
-    expandirArea(tablero, i, j)
+    expandirAreaPrimerClick(tablero, i, j)
 
     tablero.forEach( (fila, k) => { // Oculto todos los casilleros que no se deben descubrir con el primer click
         fila.forEach( (bloque, l) => {
