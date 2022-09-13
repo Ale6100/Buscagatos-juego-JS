@@ -59,6 +59,7 @@ function iniciarCronometro() {
 }
 
 function crearTableroVacioHTML(filas, columnas) {
+    tablero.classList.add("bordeTablero")
     tableroHTML.innerHTML = ""                    // Primero vacío el tablero, en caso de que estemos iniciando una nueva partida
     for (let i=0; i<filas; i++) {
         const filai = document.createElement("tr"); // Creo la cantidad de filas pedidas mediante etiquetas tr
@@ -129,20 +130,43 @@ function expandirArea(tablero, i, j) { // Esta función expande el área de un c
                     if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && tablero[i+n][j+m].estado == "oculto")  {
                         expandirArea(tablero, i+n, j+m)
                     }
-                    tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
+                    tablero[i+n][j+m].estado = "visible"
+                    const casillero = document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`)
+                    if (!casillero.classList.contains("visibleTexto")) { // Quiero que se borre el texto en los casilleros que todavía no fueron coloreados
+                        casillero.children[0].classList.add("textoOculto")
+                    }
+                    
                 }
             }
         }
     }
 }
 
-function expandirAreaPrimerClick(tablero, i, j) { // Esta función expande el área cuando se hace el primer click. Recordemos que dicho casillero será visible y no habrá ningún gato, al igual que sus vecinos sin bandera
+function expandirAreaPrimerClick(tablero, i, j) { // Esta función entra a la función expandirArea para analizar los casilleros vecinos del primero visible. Recordemos que el primer casillero será visible y no habrá ningún gato, al igual que sus vecinos sin bandera
     for (let n=-1; n<=1; n++) {
         for (let m=-1; m<=1; m++) {
             if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
                 if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && (tablero[i+n][j+m].bandera == false))  {
                     expandirArea(tablero, i+n, j+m)
-                } 
+                }
+            }
+        }
+    }
+}
+
+function expandirAreaFalsa(tablero, i, j) { // Esta función expande el área de manera análoga a la función "expandirArea", con la diferencia de que pinta los casilleros con un retraso para dar un efecto de animación
+    for (let n=-1; n<=1; n++) {
+        for (let m=-1; m<=1; m++) {
+            if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
+                if (tablero[i+n][j+m].bandera == false) {
+                    setTimeout(() => {
+                        const casillero = document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`)
+                        if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && casillero.classList.contains("casilleroOculto"))  {
+                            expandirAreaFalsa(tablero, i+n, j+m)    
+                        }
+                        tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, casillero)
+                    }, 20);
+                }
             }
         }
     }
@@ -277,10 +301,6 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
                         tablero[i+n][j+m].gato = false
                         cantGatos -= 1
                     }
-
-                    if (tablero[i+n][j+m].bandera == false) {
-                        tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`))
-                    }
                 }
             }
         }
@@ -308,6 +328,7 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
         })
     })
     expandirAreaPrimerClick(tablero, i, j)
+    expandirAreaFalsa(tablero, i, j)
 
     tablero.forEach( (fila, k) => { // Oculto todos los casilleros que no se deben descubrir con el primer click
         fila.forEach( (bloque, l) => {
@@ -342,6 +363,8 @@ function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cant
 
         } else if(tablero[i][j].gatosVecinos == "") { // Esto se ejecuta si hicimos click sobre un casillero sin gatos y sin gatos a su alrededor
             expandirArea(tablero, i, j)
+            expandirAreaFalsa(tablero, i, j)
+
             if (juegoGanado(tablero, filas, columnas, cantGatos)) {
                 juegoTerminado = despedida(tablero, "ganar", cantidadDeClicks, partidas, porcent)
             }

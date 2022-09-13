@@ -138,8 +138,11 @@ input {
     margin: auto;
     user-select: none;
     font-weight: bold;
-    border: 1px solid rgb(0, 0, 0);
     box-shadow: 2px -2px 2px;
+}
+
+.bordeTablero {
+    border: 1px solid rgb(0, 0, 0);
 }
 
 #cartelInicial {
