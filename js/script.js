@@ -135,7 +135,6 @@ function expandirArea(tablero, i, j) { // Esta función expande el área de un c
                     if (!casillero.classList.contains("visibleTexto")) { // Quiero que se borre el texto en los casilleros que todavía no fueron coloreados
                         casillero.children[0].classList.add("textoOculto")
                     }
-                    
                 }
             }
         }
@@ -161,8 +160,8 @@ function expandirAreaFalsa(tablero, i, j) { // Esta función expande el área de
                 if (tablero[i+n][j+m].bandera == false) {
                     setTimeout(() => {
                         const casillero = document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`)
-                        if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && casillero.classList.contains("casilleroOculto"))  {
-                            expandirAreaFalsa(tablero, i+n, j+m)    
+                        if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && casillero.classList.contains("casilleroOculto")) {
+                            expandirAreaFalsa(tablero, i+n, j+m)
                         }
                         tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, casillero)
                     }, 20);
@@ -281,7 +280,7 @@ function despedida(tablero, resultado, cantidadDeClicks, partidas, porcent) { //
     return true
 }
 
-function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, partidas) { // Comportamiento del primer click izquierdo sobre el tablero. El primer click es especial
+function primerClick(tablero, filas, columnas, i, j, porcent, cantidadDeClicks, partidas) { // Comportamiento del primer click izquierdo sobre el tablero. El primer click es especial
     let cantGatos
     do { // Este do...while hace que siempre haya por lo menos un gato en el tablero
         cantGatos = 0
@@ -343,14 +342,13 @@ function primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantida
     if (juegoGanado(tablero, filas, columnas, cantGatos)) {
         juegoTerminado = despedida(tablero, "ganar", cantidadDeClicks, partidas, porcent)
     }
-
     return [cantGatos, true, juegoTerminado] // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
 }
 
 function clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas) { // Comportamiento del click izquierdo sobre la ubicación tablero[i, j] del tablero
     if (primerClickRealizado == false) { // Este if se ejecuta a la hora de hacer el primer click sobre el tablero
         cantidadDeClicks += 1;
-        [cantGatos, primerClickRealizado, juegoTerminado] = primerClick(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, partidas)
+        [cantGatos, primerClickRealizado, juegoTerminado] = primerClick(tablero, filas, columnas, i, j, porcent, cantidadDeClicks, partidas)
 
     } else if (juegoTerminado == false && casillero.classList.contains("casilleroOculto")) { // Esto se ejecuta si en el click anterior no se terminó el juego, y si estamos presionando sobre un casillero oculto
         cantidadDeClicks += 1
