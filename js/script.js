@@ -249,7 +249,7 @@ function alertasEspeciales(resultado, cantidadDeClicks, partidas, inputsOriginal
                             timer: 3000,
                             timerProgressBar: true
                         })
-                        document.getElementById("cantFilas").value = 11
+                        document.getElementById("cantFilas").value = 11 // Deben coincidir con los parámetros por defecto en el index.html
                         document.getElementById("cantColumnas").value = 11
                         document.getElementById("dificPorcent").value = 15
                     }
