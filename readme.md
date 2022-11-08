@@ -4,9 +4,7 @@ Bienvenido! Te presento mi primer juego creado con HTML, CSS y JavaScript.
 
 Se trata de un buscaminas muy personalizado. Ve a **Funcionalidades** para ver las características que considero más relevantes.
 
-## Deploy 🌎
-
-Utiliza la versión más reciénte subida a la web [aquí](https://buscagatos.netlify.app/)
+Utiliza la versión más reciénte subida a la web [aquí](https://buscagatos.netlify.app/).
 
 ## Contexto 📌
 
