@@ -215,6 +215,9 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
             confirmButtonText: 'OK',
             showDenyButton: true,
             denyButtonText: `Eliminar registro`,
+            customClass: {
+                confirmButton: 'completedGame', // Clase para facilitarle el seguimiento a Tag Manager
+            },
         }).then( (result) => { // Reinicia el registro de partidas, en caso de que el usuario lo decida
             if (result.isDenied) {
                 Swal.fire({
@@ -231,6 +234,9 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
             icon: 'error',
             title: 'Te descubrieron! 😔',
             text: "No te preocupes y vuelve a intentarlo",
+            customClass: {
+                confirmButton: 'failedGame',
+            },
         }).then( (result) => {
             // Si perdiste 5 veces seguidas o más, hay un 10% de probabilidades de que te sugiera colocar los inputs por defecto, en caso de que no estén puestos
             if (result.isConfirmed && partidas.perdidasContinuas >= 5 && Math.random()*100 < 10 && inputsOriginales == false) {
@@ -390,7 +396,6 @@ const clickDerecho = (tablero, i, j, casillero, juegoTerminado) => { // Comporta
 
 const cronometro = document.getElementById("cronometro")
 const tableroHTML = document.getElementById("tablero")
-const form = document.getElementById("form")
 const victorias = document.getElementById("victorias")
 
 let datosInputs, interval, partidas
@@ -407,7 +412,7 @@ if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exis
     victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
 }
 
-form.addEventListener("submit", (e) => { // El juego inicia (o se reinicia) una vez que apretamos en "INICIAR"
+document.getElementById("form").addEventListener("submit", (e) => { // El juego inicia (o se reinicia) una vez que apretamos en "INICIAR"
     e.preventDefault()
 
     const filas = document.getElementById("cantFilas").value // Obtengo los valores de los inputs
