@@ -13,9 +13,9 @@ const inputIncorrecto = (mensajeError, duracionSegundos) => { // Muestra un cart
         position: "right",
         stopOnFocus: true,
         style: {
-          background: "linear-gradient(to right, rgb(0, 0, 0), rgb(80, 80, 80))",
-          border: "2px solid rgb(255, 255, 255)",
-          borderRadius: "10px",
+            background: "linear-gradient(to right, rgb(0, 0, 0), rgb(80, 80, 80))",
+            border: "2px solid rgb(255, 255, 255)",
+            borderRadius: "10px",
         }
     }).showToast();
 }
@@ -35,12 +35,12 @@ const mostrarError = (filas, columnas, porcent) => { // Muestra un cartel con un
     }
 }
 
-const agregarCero = (numero) => { // Recibe un número y le coloca un cero a la izquierda si es menor que 10 (no importa si el return es de tipo string o number)
+const agregarCero = (numero) => { // Recibe un número y le coloca un cero a la izquierda si es menor que 10. No importa si el return es de tipo string o number
     return (numero < 10) ? "0"+numero : numero
 }
 
 const iniciarCronometro = () => {
-    clearInterval(interval)  // Estas dos líneas detienen el cronómetro y colocan "00:00:00" en su cartel correspondiente. Sirve en caso de que no sea la primera vez que iniciamos el juego
+    clearInterval(interval) // Estas dos líneas detienen el cronómetro y colocan "00:00:00" en su cartel correspondiente. Sirve en caso de que no sea la primera vez que iniciamos el juego
     cronometro.innerText = "00:00:00"
     let segundos = 0, minutos = 0, horas = 0
     interval = setInterval( () => { // Cada vez que se ejecuta esto, se agrega un segundo
@@ -60,7 +60,7 @@ const iniciarCronometro = () => {
 
 const crearTableroVacioHTML = (filas, columnas) => {
     tablero.classList.add("bordeTablero")
-    tableroHTML.innerHTML = ""                    // Primero vacío el tablero, en caso de que estemos iniciando una nueva partida
+    tableroHTML.innerHTML = "" // Primero vacío el tablero, en caso de que estemos iniciando una nueva partida
     for (let i=0; i<filas; i++) {
         const filai = document.createElement("tr"); // Creo la cantidad de filas pedidas mediante etiquetas tr
         for (let j=0; j<columnas; j++) {
@@ -96,7 +96,7 @@ const crearTableros = (filas, columnas) => { // Crea ambos tableros. Devuelvo el
 const mostrarConsejos = async () => { // Cada vez que se hace click izquierdo sobre un casillero hay un 10% de probabilidades de que se muestre un consejo al azar debajo del tablero
     if (Math.random()*100 < 10) {
         try {
-            const response = await fetch('./json/data.json') // Accedo al json donde están los consejos. Esto me obliga a ejecutar el código desde un servidor para que funcione correctamente
+            const response = await fetch('./json/data.json') // Accedo al json donde están los consejos. Esto me obliga a ejecutar el código desde un servidor para que funcione correctamente. Estoy consciente de que no era necesario hacer un json para esto, pero era mi primera vez haciendo uno y quería demostrar que podía darle uso
             const data = await response.json()
             consejosRandom.innerText = `Consejo random: ${data[parseInt(Math.random()*data.length)].consejo}` // Accedo a un consejo al azar y lo agrego en la página web
         } catch {
@@ -200,7 +200,7 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
     [porcentajePartidasGanadas, partidas] = actualizarRegistroPartidas(partidas, resultado)
     if (resultado == "ganar") { // Alerta especial en caso de haber ganado
         if (cantidadDeClicks == 1) {
-            mensaje = `Has terminado luego de... ¿un click? Qué suerte! Prueba de nuevo pero con un porcentaje de gatos distinto. Tu porcentaje de victorias es del ${porcentajePartidasGanadas}%`
+            mensaje = `Has terminado luego de... ¿un click? Qué suerte! Prueba de nuevo pero con unas condiciones iniciales distintas. Tu porcentaje de victorias es del ${porcentajePartidasGanadas}%`
         } else {
             mensaje = `Has terminado luego de ${cantidadDeClicks} clicks! Tu porcentaje de victorias es del ${porcentajePartidasGanadas}%`
         }
@@ -440,9 +440,9 @@ document.getElementById("form").addEventListener("submit", (e) => { // El juego 
 
         const tablero = crearTableros(filas, columnas)
         let primerClickRealizado = false // Establezco que todavía no se hizo el primer click sobre el tablero
-        let juegoTerminado = false       // Se va a convertir a true cuando el juego haya termnado
-        let cantGatos                    // Me va a servir para contar la cantidad de gatos en el tablero
-        let cantidadDeClicks = 0         // Contador de clicks izquierdos sobre el tablero
+        let juegoTerminado = false // Se va a convertir a true cuando el juego haya termnado
+        let cantGatos // Me va a servir para contar la cantidad de gatos en el tablero
+        let cantidadDeClicks = 0 // Contador de clicks izquierdos sobre el tablero
         const consejosRandom = document.getElementById(`consejosRandom`)
         consejosRandom.innerText = ""
 
@@ -450,7 +450,7 @@ document.getElementById("form").addEventListener("submit", (e) => { // El juego 
             fila.forEach( (bloque, j) => {
                 const casillero = document.getElementById(`fila-${i+1}-columna-${j+1}`)
 
-                casillero.addEventListener("click", () => {  // Establezco lo que va a suceder cuando hago un click en un casillero ("tablero[i][j]" es lo mismo que "bloque")
+                casillero.addEventListener("click", () => { // Establezco lo que va a suceder cuando hago un click en un casillero. Aclaro que "tablero[i][j]" es lo mismo que "bloque"
                     if (bloque.bandera == false) {
                         [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
                     }

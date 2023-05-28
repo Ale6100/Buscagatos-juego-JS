@@ -3,7 +3,7 @@
 class Casillero { // Clase que crea objetos que representan a los casilleros
     constructor() {
         this.estado = "oculto" // "oculto" o "visible"
-        this.gato = false   // Sin gato o con gato (false o true)
+        this.gato = false // Sin gato o con gato (false o true)
         this.gatosVecinos = null // "" o un número (por defecto no es ninguno)
         this.bandera = false // Sin bandera o con bandera (false o true)
     }

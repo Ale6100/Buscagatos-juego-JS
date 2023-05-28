@@ -20,7 +20,7 @@
     },
 
     {
-        "consejo" : "Si no hay un claro casillero donde apretar, siempre puedes calcular cuál será el menos peligroso"
+        "consejo" : "Si no hay un claro casillero donde apretar, siempre puedes inferir cuál será el menos peligroso"
     },
 
     {
@@ -57,5 +57,9 @@
 
     {
         "consejo" : "¿Ganas continuamente? Modifica los parámetros iniciales y enfréntate a un desafío de tu talla"
+    },
+
+    {
+        "consejo" : "Aprende de tus errores y mejora tu estrategia en cada partida"
     }
 ]

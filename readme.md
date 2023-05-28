@@ -18,7 +18,7 @@ Alternativamente puedes _Forkear_ el repositorio
 
 ### Pre-requisitos 📋
 
-Se hace uso de un archivo json local traido con fetch, por lo tanto Necesitas ejecutar el archivo desde un servidor. En caso de que tengas Visual Studio Code puedes utilizar la extensión Live Server.
+Se hace uso de un archivo json local traido con fetch, por lo tanto necesitas ejecutar el archivo desde un servidor. En caso de que tengas Visual Studio Code puedes utilizar la extensión [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
 
 ### Instalación 🔧
 
@@ -40,7 +40,7 @@ Ejecuta el código con Live Server y listo!
 
 * Se pueden personalizar las dimensiones del tablero siempre y cuando tenga entre 10 y 2500 casilleros.
 
-El límite máximo se colocó para evitar que alguien coloque un número muy grande, provocando que su dispositivo no responda con fluidez. Sin embargo puede modificarse en el condicional ```if``` que ejecuta la función ```mostrarError```.
+El límite máximo se colocó para evitar que alguien coloque un número muy grande, provocando que su dispositivo no responda con fluidez. Sin embargo puede modificarse en el condicional `if` que ejecuta la función `mostrarError`.
 
 * Se puede establecer un porcentaje de gatos aproximado entre 1% y 99%, siempre y cuando sea un número entero
 
@@ -52,7 +52,7 @@ El límite máximo se colocó para evitar que alguien coloque un número muy gra
 
 * Con el click derecho se puede colocar banderas como en un buscaminas de verdad. Hacer click izquierdo sobre un casillero con bandera no produce ningún efecto. En móvil o tablet se puede simular dejando presionado el dedo un par de segundos sobre un casillero. Hice responsive la página motivado por este hecho.
 
-* A medida que el juego avanza aparecen pequeños consejos al azar debajo del tablero (actualmente son 15). No aparecen siempre para no ser pesado con el jugador.
+* A medida que el juego avanza aparecen pequeños consejos al azar debajo del tablero (actualmente son 16). No aparecen siempre para no ser pesado con el jugador.
 
 * Las áreas se expanden con un efecto animado.
 
@@ -66,7 +66,7 @@ El límite máximo se colocó para evitar que alguien coloque un número muy gra
 
 * No es posible continuar jugando cuando el juego ya terminó (parece obvio pero aclaro que eso también lo tuve en cuenta). Esto quiere decir que los clicks que hacemos en el tablero ya no tienen ningún efecto sobre él. En caso de querer iniciar de nuevo es necesario apretar en el botón "INICIAR".
 
-## Autores ✒️
+## Autor ✒️
 
 * **Alejandro Portaluppi** - [LinkedIn](https://www.linkedin.com/in/alejandro-portaluppi/)
 
