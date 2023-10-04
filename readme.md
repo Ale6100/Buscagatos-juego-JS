@@ -8,7 +8,7 @@ Utiliza la versión más reciénte subida a la web [aquí](https://buscagatos.ne
 
 ## Contexto 📌
 
-Hice este proyecto en mi curso de JavaScript con el propósito de enfrentarme un desafío fuera de lo común para un principiante, utilizando mi experiencia previa en Python.
+Este proyecto lo inicié en mi curso de JavaScript con el propósito de enfrentarme un desafío fuera de lo común para un principiante utilizando mi experiencia previa en Python. Con el paso del tiempo lo estoy mejorando.
 
 ## Comenzando 🚀
 
@@ -42,7 +42,7 @@ Ejecuta el código con Live Server y listo!
 
 El límite máximo se colocó para evitar que alguien coloque un número muy grande, provocando que su dispositivo no responda con fluidez. Sin embargo puede modificarse en el condicional `if` que ejecuta la función `mostrarError`.
 
-* Se puede establecer un porcentaje de gatos aproximado entre 1% y 99%, siempre y cuando sea un número entero
+* Se puede establecer un porcentaje de gatos aproximado entre 1% y 90%, siempre y cuando sea un número natural.
 
 * Si se intenta personalizar el tablero con parámetros fuera de los rangos mencionados anteriormente, el juego no se inicia y te enseña el problema usando la librería Toastify.
 

@@ -1,13 +1,26 @@
 "use strict";
 
+/**
+ * Toma la cantidad de partidas ganadas y perdidas. Devuelve el porcentaje redondeado de partidas ganadas.
+ *
+ * @param {number} partidasGanadas - Cantidad de partidas ganadas
+ * @param {number} partidasPerdidas - Cantidad de partidas ganadas
+ * @return {number} El porcentaje redondeado de partidas ganadas
+ */
 const porcentajeDeVictorias = (partidasGanadas, partidasPerdidas) => { // Toma la cantidad de partidas ganadas y perdidas. Devuelve el porcentaje redondeado de partidas ganadas
     return (partidasGanadas + partidasPerdidas == 0) ? 0 : Math.round(partidasGanadas*100/(partidasGanadas + partidasPerdidas))
 }
 
-const inputIncorrecto = (mensajeError, duracionSegundos) => { // Muestra un cartel pequeño arriba a la derecha con Toastify. Lo uso para indicar valores erroneos ingresados en los inputs
+/**
+ * Muestra un cartel pequeño arriba a la derecha con Toastify. Lo uso para indicar valores erroneos ingresados en los inputs
+ *
+ * @param {string} mensajeError - Texto del cartel
+ * @param {number} duracionSegundos - Tiempo que tarda en irse (en segundos)
+ */
+const inputIncorrecto = (mensajeError, duracionSegundos) => {
     Toastify({
-        text: mensajeError, // Texto del cartel
-        duration: duracionSegundos*1000, // Tiempo que tarda en irse
+        text: mensajeError,
+        duration: duracionSegundos*1000,
         close: true,
         gravity: "top",
         position: "right",
@@ -20,7 +33,13 @@ const inputIncorrecto = (mensajeError, duracionSegundos) => { // Muestra un cart
     }).showToast();
 }
 
-const mostrarError = (filas, columnas, porcent) => { // Muestra un cartel con un texto distinto según sea el error del input ingresado
+/**
+ * Muestra un cartel con un texto distinto según sea el error del input ingresado
+ *
+ * @param {number} filas - El número de filas ingresado
+ * @param {number} columnas - El número de columnas ingresado
+ */
+const mostrarError = (filas, columnas) => {
     if (filas < 0 || columnas < 0) {
         inputIncorrecto(`No es posible colocar filas o columnas negativas`, 4)
 
@@ -30,12 +49,17 @@ const mostrarError = (filas, columnas, porcent) => { // Muestra un cartel con un
     } else if (filas*columnas > 2500) {
         inputIncorrecto(`¿En serio quieres ${filas*columnas} casilleros? Para no forzar a tu dispositivo se permiten 2500 como máximo`, 7)
 
-    } else { // Se ejecuta si porcent <= 0 || porcent >= 100 ya que es el último caso posible por el cual se ejecutó esta función
-        inputIncorrecto(`"Gatos aproximados (%)" establece el porcentaje de gatos aproximado que deseas tener en el tablero. Por tal motivo no se permite colocar ${porcent}%`, 9)
+    } else { // Se ejecuta si porcent <= 0 || porcent > 90 ya que es el último caso posible por el cual se ejecutó esta función
+        inputIncorrecto('"Gatos aproximados (%)" establece el porcentaje de gatos aproximado que deseas tener en el tablero. Se permite un valor entre 1 y 90"', 9)
     }
 }
 
-const agregarCero = (numero) => { // Recibe un número y le coloca un cero a la izquierda si es menor que 10. No importa si el return es de tipo string o number
+/**
+ * Recibe un número natural y le coloca un cero a la izquierda si es menor que 10
+ * @param {number} numero
+ * @returns {string | number}
+ */
+const agregarCero = numero => {
     return (numero < 10) ? "0"+numero : numero
 }
 
@@ -58,6 +82,12 @@ const iniciarCronometro = () => {
     }, 1000)
 }
 
+/**
+ * Crea un tablero HTML vacío con el número especificado de filas y columnas
+ *
+ * @param {number} filas - El número de filas
+ * @param {number} columnas - El número de columnas
+ */
 const crearTableroVacioHTML = (filas, columnas) => {
     tablero.classList.add("bordeTablero")
     tableroHTML.innerHTML = "" // Primero vacío el tablero, en caso de que estemos iniciando una nueva partida
@@ -75,7 +105,14 @@ const crearTableroVacioHTML = (filas, columnas) => {
     }
 }
 
-const crearTableroVacioJuego = (filas, columnas) => { // Crea un tablero con casilleros "ocultos" en js
+/**
+ * Crea un tablero de juego con casilleros "ocultos"
+ *
+ * @param {number} filas - El número de filas
+ * @param {number} columnas - El número de columnas
+ * @return {array} El tablero de juego
+ */
+const crearTableroVacioJuego = (filas, columnas) => {
     const tablero = []
     for (let i=0; i<filas; i++) {
         const filai = []
@@ -88,7 +125,14 @@ const crearTableroVacioJuego = (filas, columnas) => { // Crea un tablero con cas
     return tablero
 }
 
-const crearTableros = (filas, columnas) => { // Crea ambos tableros. Devuelvo el tablero de js para manipularlo más adelante
+/**
+ * Crea ambos tableros. Devuelve el tablero de JS para su posterior manipulación
+ *
+ * @param {number} filas - El número de filas para los tableros
+ * @param {number} columnas - El número de columnas para los tableros
+ * @return {Array} El tablero de JS vacío
+ */
+const crearTableros = (filas, columnas) => {
     crearTableroVacioHTML(filas, columnas)
     return crearTableroVacioJuego(filas, columnas)
 }
@@ -98,18 +142,35 @@ const mostrarConsejos = async () => { // Cada vez que se hace click izquierdo so
         try {
             const response = await fetch('./json/data.json') // Accedo al json donde están los consejos. Esto me obliga a ejecutar el código desde un servidor para que funcione correctamente. Estoy consciente de que no era necesario hacer un json para esto, pero era mi primera vez haciendo uno y quería demostrar que podía darle uso
             const data = await response.json()
-            consejosRandom.innerText = `Consejo random: ${data[parseInt(Math.random()*data.length)].consejo}` // Accedo a un consejo al azar y lo agrego en la página web
+            consejosRandom.innerText = `Consejo random: ${data[Math.floor(Math.random()*data.length)].consejo}` // Accedo a un consejo al azar y lo agrego en la página web
         } catch {
             console.error("Error! Para utilizar este sitio correctamente debes ejecutar el proyecto desde un servidor. Te recomiendo la extensión Live Server en caso de que uses Visual Studio Code o visitar la última versión oficial en https://buscagatos.netlify.app")
         }
     }
 }
 
+/**
+ * Devuelve true si tablero[i][j] pertenece al tablero. Se utiliza para evitar errores al analizar los bordes
+ *
+ * @param {number} filas - El número de filas en el tablero
+ * @param {number} columnas - El número de columnas en el tablero
+ * @param {number} i - El índice de fila
+ * @param {number} j - El índice de columna
+ * @return {boolean} true si la celda pertenece al tablero, false en caso contrario
+ */
 const perteneceAlTablero = (filas, columnas, i, j) => { // Devuelve true si tablero[i][j] pertenece al tablero. Lo uso para evitar errores a la hora de analizar los bordes
     return i >= 0 && j >= 0 && i < filas && j < columnas
 }
 
-const analizarCasillerosVecinos = (tablero, i, j) => { // Recibe un tablero y una ubicación. Dicha ubicación será en un casillero sin gato. La función devuelve su cantidad de gatos vecinos
+/**
+ * Recibe un tablero y una ubicación. Dicha ubicación será en un casillero sin gato. La función devuelve su cantidad de gatos vecinos
+ *
+ * @param {array} tablero - El tablero de juego
+ * @param {number} i - El índice de fila de la ubicación
+ * @param {number} j - El índice de columna de la ubicación
+ * @return {number | ""} La cantidad de gatos vecinos
+ */
+const contarGatosVecinos = (tablero, i, j) => {
     let cantidadDeGatosVecinos = 0
     for (let n=-1; n<=1; n++) {
         for (let m=-1; m<=1; m++) {
@@ -122,7 +183,14 @@ const analizarCasillerosVecinos = (tablero, i, j) => { // Recibe un tablero y un
     return cantidadDeGatosVecinos
 }
 
-const expandirArea = (tablero, i, j) => { // Esta función expande el área de un casillero y sus vecinos sin bandera cuando se hace analiza un casillero que no tiene gatos ni gatos a su alrededor
+/**
+ * Expande el área de un casillero y sus vecinos sin bandera cuando se analiza un casillero que no tiene gatos ni gatos a su alrededor
+ *
+ * @param {array} tablero - El tablero en el que se encuentra el casillero
+ * @param {number} i - El índice de fila del casillero
+ * @param {number} j - El índice de columna del casillero
+ */
+const expandirArea = (tablero, i, j) => {
     for (let n=-1; n<=1; n++) {
         for (let m=-1; m<=1; m++) {
             if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
@@ -141,7 +209,14 @@ const expandirArea = (tablero, i, j) => { // Esta función expande el área de u
     }
 }
 
-const expandirAreaPrimerClick = (tablero, i, j) => { // Esta función entra a la función expandirArea para analizar los casilleros vecinos del primero visible. Recordemos que el primer casillero será visible y no habrá ningún gato, al igual que sus vecinos sin bandera
+/**
+ * Entra a la función expandirArea para analizar los casilleros vecinos de la ubicación del primer click. Recordemos que el primer casillero siempre será visible y no habrá ningún gato, al igual que sus vecinos
+ *
+ * @param {Array} tablero - El tablero de juego
+ * @param {number} i - El índice de fila de la primera celda clickeada
+ * @param {number} j - El índice de columna de la primera celda clickeada
+ */
+const expandirAreaPrimerClick = (tablero, i, j) => { 
     for (let n=-1; n<=1; n++) {
         for (let m=-1; m<=1; m++) {
             if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
@@ -153,7 +228,15 @@ const expandirAreaPrimerClick = (tablero, i, j) => { // Esta función entra a la
     }
 }
 
-const expandirAreaFalsa = (tablero, i, j) => { // Esta función expande el área de manera análoga a la función "expandirArea", con la diferencia de que pinta los casilleros con un retraso para dar un efecto de animación
+/**
+ * Esta función expande el área de manera análoga a la función "expandirArea", con la diferencia de que pinta los casilleros con un retraso para dar un efecto de animación
+ * La llamo "Area falsa" porque el área afectada es la del DOM, no la del tablero JS que maneja la lógica importante (de esa ya se encarga la función expandirArea)
+ *
+ * @param {array} tablero - El tablero del juego
+ * @param {number} i - El índice de la fila actual
+ * @param {number} j - El índice de la columna actual
+ */
+const expandirAreaFalsa = (tablero, i, j) => {
     for (let n=-1; n<=1; n++) {
         for (let m=-1; m<=1; m++) {
             if (perteneceAlTablero(tablero.length, tablero[0].length, i+n, j+m)) {
@@ -171,31 +254,57 @@ const expandirAreaFalsa = (tablero, i, j) => { // Esta función expande el área
     }
 }
 
-const juegoGanado = (tablero, filas, columnas, cantGatos) => { // Devuelve true si ganamos el juego
+/**
+ * Verifica si se ganó el juego
+ *
+ * @param {array} tablero - El tablero del juego
+ * @param {number} filas - El número de filas
+ * @param {number} columnas - El número de columnas
+ * @param {number} cantGatos - El número de gatos
+ * @return {boolean} - true si se ha ganado el juego, false en caso contrario
+ */
+const juegoGanado = (tablero, filas, columnas, cantGatos) => {
     let casillerosVisibles = 0
-    tablero.forEach( (fila) => {
-        fila.forEach( (bloque) => {
+    tablero.forEach( fila => {
+        fila.forEach( bloque => {
             (bloque.estado == "visible") && (casillerosVisibles += 1)
         })
     });
     return (filas*columnas - cantGatos == casillerosVisibles) ? true : false
 }
 
-const actualizarRegistroPartidas = (partidas, resultado) => { // Actualiza la base de datos donde se guarda la cantidad de partidas ganadas, perdidas y perdidas continuamente
+/**
+ * Actualiza el localStorage donde se almacena la cantidad de partidas ganadas, perdidas y perdidas continuamente
+ *
+ * @param {Object} partidas - El objeto que contiene la información de las partidas
+ * @param {"ganar" | "perder"} resultado - El resultado de la partida
+ * @return {Array} - El nuevo porcentaje de victorias y el objeto "partidas" actualizado
+ */
+const actualizarRegistroPartidas = (partidas, resultado) => {
     if (resultado == "ganar") {
         partidas.ganadas += 1
         partidas.perdidasContinuas = 0 // partidas.perdidasContinuas es el número de partidas que se perdieron continuamente
-    } else {
+    } else if (resultado == "perder") {
         partidas.perdidas += 1
         partidas.perdidasContinuas += 1
+    } else {
+        console.error("No se ha podido actualizar el registro de partidas");
     }
     const porcentajePartidasGanadas = porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)
     localStorage.setItem("partidasPasadas", JSON.stringify(partidas))
     victorias.innerText = `${porcentajePartidasGanadas}%`
-    return [porcentajePartidasGanadas, partidas] // Devuelve el nuevo porcentaje de victorias y el objeto "partidas" actualizado
+    return [porcentajePartidasGanadas, partidas]
 }
 
-const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginales) => { // Alertas especiales con Sweet Alert 2 al finalizar cada partida
+/**
+ * Alertas especiales al finalizar cada partida
+ *
+ * @param {"ganar" | "perder"} resultado - El resultado de la partida
+ * @param {number} cantidadDeClicks - La cantidad de clicks realizados
+ * @param {object} partidas - El objeto que contiene la información de las partidas
+ * @param {boolean} inputsOriginales - Indica si se usaron los valores originales de los inputs
+ */
+const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginales) => {
     let porcentajePartidasGanadas, mensaje
     [porcentajePartidasGanadas, partidas] = actualizarRegistroPartidas(partidas, resultado)
     if (resultado == "ganar") { // Alerta especial en caso de haber ganado
@@ -218,7 +327,7 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
             customClass: {
                 confirmButton: 'completedGame', // Clase para facilitarle el seguimiento a Tag Manager
             },
-        }).then( (result) => { // Reinicia el registro de partidas, en caso de que el usuario lo decida
+        }).then( result => { // Reinicia el registro de partidas, en caso de que el usuario lo decida
             if (result.isDenied) {
                 Swal.fire({
                 icon: 'success',
@@ -237,7 +346,7 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
             customClass: {
                 confirmButton: 'failedGame',
             },
-        }).then( (result) => {
+        }).then( result => {
             // Si perdiste 5 veces seguidas o más, hay un 10% de probabilidades de que te sugiera colocar los inputs por defecto, en caso de que no estén puestos
             if (result.isConfirmed && partidas.perdidasContinuas >= 5 && Math.random()*100 < 10 && inputsOriginales == false) {
                 Swal.fire({
@@ -247,7 +356,7 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
                     confirmButtonText: 'Aceptar',
                     showDenyButton: true,
                     denyButtonText: `Rechazar`
-                }).then( (result) => {
+                }).then( result => {
                     if (result.isConfirmed) {
                         Swal.fire({
                             icon: 'success',
@@ -265,7 +374,17 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
     }
 }
 
-const despedida = (tablero, resultado, cantidadDeClicks, partidas, porcent) => { // Código que se ejecuta cuando terminó el juego
+/**
+ * Se ejecuta cuando terminó el juego
+ *
+ * @param {Array} tablero - El tablero del juego
+ * @param {"ganar" | "perder"} resultado - El resultado del juego
+ * @param {number} cantidadDeClicks - La cantidad de clicks realizados durante el juego
+ * @param {number} partidas - El objeto que contiene la información de las partidas
+ * @param {number} porcent - El porcentaje de celdas con gatos solicitados por el usuario
+ * @return {boolean} true
+ */
+const despedida = (tablero, resultado, cantidadDeClicks, partidas, porcent) => {
     tablero.forEach( (fila, k) => {
         fila.forEach( (bloque, l) => {
             if (bloque.gato == true) { // Hago que los gatos aparezcan con un color de fondo u otro en caso de haber perdido o ganado
@@ -286,12 +405,25 @@ const despedida = (tablero, resultado, cantidadDeClicks, partidas, porcent) => {
     return true
 }
 
-const primerClick = (tablero, filas, columnas, i, j, porcent, cantidadDeClicks, partidas) => { // Comportamiento del primer click izquierdo sobre el tablero. El primer click es especial
+/**
+ * Comportamiento del primer click izquierdo sobre el tablero. El primer click es especial
+ *
+ * @param {array} tablero - El tablero del juego
+ * @param {number} filas - La cantidad de filas
+ * @param {number} columnas - La cantidad de columnas
+ * @param {number} i - El índice de la fila actual
+ * @param {number} j - El índice de la columna actual
+ * @param {number} porcent - El porcentaje de celdas con gatos solicitados por el usuario
+ * @param {number} cantidadDeClicks - La cantidad de clicks realizados en el juego
+ * @param {number} partidas - El objeto que contiene la información de las partidas
+ * @return {array} - Un arreglo con la cantidad de gatos, un valor true y un valor booleano que indica si el juego terminó
+ */
+const primerClick = (tablero, filas, columnas, i, j, porcent, cantidadDeClicks, partidas) => {
     let cantGatos
     do { // Este do...while hace que siempre haya por lo menos un gato en el tablero
         cantGatos = 0
-        tablero.forEach( (fila) => { // Recorro el tablero y pido que cada casillero tenga un porcent% de probabilidades de que haya un gato
-            fila.forEach( (bloque) => {
+        tablero.forEach( fila => { // Recorro el tablero y pido que cada casillero tenga un porcent% de probabilidades de que haya un gato
+            fila.forEach( bloque => {
                 if (Math.random()*100 < porcent) {
                     bloque.gato = true
                     cantGatos += 1
@@ -317,7 +449,7 @@ const primerClick = (tablero, filas, columnas, i, j, porcent, cantidadDeClicks, 
             if (bloque.gato == true) {
                 cluster.children[0].innerText = `🐱`
             } else {
-                const cantidadGatosVecinos = analizarCasillerosVecinos(tablero, k, l)
+                const cantidadGatosVecinos = contarGatosVecinos(tablero, k, l)
                 bloque.gatosVecinos = cantidadGatosVecinos
                 cluster.children[0].innerText = `${cantidadGatosVecinos}`
                 if (cantidadGatosVecinos <= 2) { // Le asigno colores a los números
@@ -351,7 +483,24 @@ const primerClick = (tablero, filas, columnas, i, j, porcent, cantidadDeClicks, 
     return [cantGatos, true, juegoTerminado] // Retorno los datos que necesitaré después y no se almacenan solos en otro lado
 }
 
-const clickIzquierdo = (tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas) => { // Comportamiento del click izquierdo sobre la ubicación tablero[i, j] del tablero
+/**
+ * Comportamiento del click izquierdo sobre la ubicación tablero[i][j] del tablero
+ *
+ * @param {array} tablero - El tablero del juego
+ * @param {number} filas - El número de filas
+ * @param {number} columnas - El número de columnas
+ * @param {number} i - El índice de la fila actual
+ * @param {number} j - El índice de la columna actual
+ * @param {number} porcent - El porcentaje de celdas con gatos solicitados por el usuario
+ * @param {object} casillero - El casillero en el que se hizo click
+ * @param {number} cantidadDeClicks - La cantidad total de clicks realizados en el juego
+ * @param {boolean} primerClickRealizado - Indica si se ha realizado el primer click en el juego
+ * @param {number} cantGatos - La cantidad de gatos en el tablero
+ * @param {boolean} juegoTerminado - Indica si el juego ha terminado
+ * @param {number} partidas - El objeto que contiene la información de las partidas
+ * @return {array} Un array que contiene varios valores pasados como parámetro pero modificados para llevarlos a otro lado
+ */
+const clickIzquierdo = (tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas) => {
     if (primerClickRealizado == false) { // Este if se ejecuta a la hora de hacer el primer click sobre el tablero
         cantidadDeClicks += 1;
         [cantGatos, primerClickRealizado, juegoTerminado] = primerClick(tablero, filas, columnas, i, j, porcent, cantidadDeClicks, partidas)
@@ -384,8 +533,17 @@ const clickIzquierdo = (tablero, filas, columnas, i, j, porcent, casillero, cant
     return [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado]
 }
 
-const clickDerecho = (tablero, i, j, casillero, juegoTerminado) => { // Comportamiento del click derecho sobre la ubicación tablero[i, j] del tablero. Agrega o quita banderas
-    if (casillero.classList.contains("casilleroOculto") && juegoTerminado == false) {
+/**
+ * Comportamiento del click derecho sobre la ubicación tablero[i][j] del tablero. Agrega o quita banderas
+ *
+ * @param {array} tablero - El tablero de juego
+ * @param {number} i - El índice de la fila actual
+ * @param {number} j - El índice de la columna actual
+ * @param {object} casillero - El casillero del tablero
+ * @param {boolean} juegoTerminado - Indica si el juego ha terminado
+ */
+const clickDerecho = (tablero, i, j, casillero, juegoTerminado) => {
+    if (casillero.classList.contains("casilleroOculto") && !juegoTerminado) {
         if (tablero[i][j].bandera == false) { // Si el casillero no tenía bandera, la coloca
             tablero[i][j].visibleBandera(tablero, i, j, casillero)
         } else {
@@ -412,15 +570,15 @@ if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exis
     victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
 }
 
-document.getElementById("form").addEventListener("submit", (e) => { // El juego inicia (o se reinicia) una vez que apretamos en "INICIAR"
+document.getElementById("form").addEventListener("submit", e => { // El juego inicia (o se reinicia) una vez que apretamos en "INICIAR"
     e.preventDefault()
 
     const filas = document.getElementById("cantFilas").value // Obtengo los valores de los inputs
     const columnas = document.getElementById("cantColumnas").value
     const porcent = document.getElementById("dificPorcent").value
 
-    if (filas < 0 || columnas < 0 || filas*columnas <= 9 || filas*columnas > 2500 || porcent <= 0 || porcent >= 100) { // Varias condiciones que impiden que el programa se ejcute si el usuario ingresó datos erroneos en los inputs
-        mostrarError(filas, columnas, porcent)
+    if (filas < 0 || columnas < 0 || filas*columnas <= 9 || filas*columnas > 2500 || porcent <= 0 || porcent > 90) { // Varias condiciones que impiden que el programa se ejcute si el usuario ingresó datos erroneos en los inputs
+        mostrarError(filas, columnas)
 
     } else {
         iniciarCronometro() // Cada vez que se inicia una nueva partida inicia el cronómetro
@@ -456,7 +614,7 @@ document.getElementById("form").addEventListener("submit", (e) => { // El juego 
                     }
                 })
 
-                casillero.addEventListener("contextmenu", (e) => { // Código para agregar o quitar banderas
+                casillero.addEventListener("contextmenu", e => { // Código para agregar o quitar banderas
                     e.preventDefault()
                     clickDerecho(tablero, i, j, casillero, juegoTerminado)
                 })
