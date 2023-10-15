@@ -1,3 +1,4 @@
+//@ts-check
 "use strict";
 
 class Casillero { // Clase que crea objetos que representan a los casilleros
@@ -14,7 +15,7 @@ class Casillero { // Clase que crea objetos que representan a los casilleros
      * @param {Array} tablero - El tablero de juego
      * @param {number} i - La fila del casillero
      * @param {number} j - La columna del casillero
-     * @param {HTMLElement} casillero - El elemento HTML que representa al casillero
+     * @param {HTMLTableCellElement} casillero - El elemento HTML que representa al casillero
      */
     visibleTexto(tablero, i, j, casillero) { // Hace que un casillero pase a estar descubierto
         tablero[i][j].noVisibleBandera(tablero, i, j, casillero)
@@ -29,11 +30,15 @@ class Casillero { // Clase que crea objetos que representan a los casilleros
      * @param {Array} tablero - El tablero de juego
      * @param {number} i - La fila del casillero
      * @param {number} j - La columna del casillero
-     * @param {HTMLElement} casillero - El casillero al que se le agregará la bandera
+     * @param {HTMLTableCellElement} casillero - El casillero al que se le agregará la bandera
      */
     visibleBandera(tablero, i, j, casillero) {
-        casillero.children[1].innerText = `🚩`
-        tablero[i][j].bandera = true
+        if (casillero.children[1] instanceof HTMLParagraphElement) {
+            casillero.children[1].innerText = `🚩`
+            tablero[i][j].bandera = true
+        } else {
+            throw new Error("Error interno")
+        }
     }
 
     /**
@@ -42,11 +47,15 @@ class Casillero { // Clase que crea objetos que representan a los casilleros
      * @param {Array} tablero - El tablero de juego
      * @param {number} i - La fila del casillero
      * @param {number} j - La columna del casillero
-     * @param {HTMLElement} casillero - El casillero al que se le quitará la bandera
+     * @param {HTMLTableCellElement} casillero - El casillero al que se le quitará la bandera
      */      
     noVisibleBandera(tablero, i, j, casillero) {
-        casillero.children[1].innerText = ``
-        tablero[i][j].bandera = false
+        if (casillero.children[1] instanceof HTMLParagraphElement) {
+            casillero.children[1].innerText = ``
+            tablero[i][j].bandera = false
+        } else {
+            throw new Error("Error interno")
+        }   
     }
 }
 

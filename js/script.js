@@ -1,3 +1,4 @@
+//@ts-check
 "use strict";
 
 /**
@@ -18,6 +19,7 @@ const porcentajeDeVictorias = (partidasGanadas, partidasPerdidas) => { // Toma l
  * @param {number} duracionSegundos - Tiempo que tarda en irse (en segundos)
  */
 const inputIncorrecto = (mensajeError, duracionSegundos) => {
+    //@ts-ignore lo ignoro porque viene desde una librería de terceros y no puedo importar el typado
     Toastify({
         text: mensajeError,
         duration: duracionSegundos*1000,
@@ -65,6 +67,9 @@ const agregarCero = numero => {
 
 const iniciarCronometro = () => {
     clearInterval(interval) // Estas dos líneas detienen el cronómetro y colocan "00:00:00" en su cartel correspondiente. Sirve en caso de que no sea la primera vez que iniciamos el juego
+    if (!(cronometro instanceof HTMLParagraphElement)) {
+        throw new Error("Error interno")
+    }
     cronometro.innerText = "00:00:00"
     let segundos = 0, minutos = 0, horas = 0
     interval = setInterval( () => { // Cada vez que se ejecuta esto, se agrega un segundo
@@ -89,7 +94,10 @@ const iniciarCronometro = () => {
  * @param {number} columnas - El número de columnas
  */
 const crearTableroVacioHTML = (filas, columnas) => {
-    tablero.classList.add("bordeTablero")
+    if (!(tableroHTML instanceof HTMLTableElement)) {
+        throw new Error("Error interno")
+    }
+    tableroHTML.classList.add("bordeTablero")
     tableroHTML.innerHTML = "" // Primero vacío el tablero, en caso de que estemos iniciando una nueva partida
     for (let i=0; i<filas; i++) {
         const filai = document.createElement("tr"); // Creo la cantidad de filas pedidas mediante etiquetas tr
@@ -117,6 +125,7 @@ const crearTableroVacioJuego = (filas, columnas) => {
     for (let i=0; i<filas; i++) {
         const filai = []
         for (let j=0; j<columnas; j++) {
+            //@ts-ignore Lo ignoro porque viene viene desde un archivo externo
             const casillero = new Casillero() // Cada casillero lo represento con un objeto
             filai.push(casillero)
         }
@@ -168,7 +177,7 @@ const perteneceAlTablero = (filas, columnas, i, j) => { // Devuelve true si tabl
  * @param {array} tablero - El tablero de juego
  * @param {number} i - El índice de fila de la ubicación
  * @param {number} j - El índice de columna de la ubicación
- * @return {number | ""} La cantidad de gatos vecinos
+ * @return {number} La cantidad de gatos vecinos
  */
 const contarGatosVecinos = (tablero, i, j) => {
     let cantidadDeGatosVecinos = 0
@@ -179,7 +188,6 @@ const contarGatosVecinos = (tablero, i, j) => {
             }
         }
     }
-    (cantidadDeGatosVecinos == 0) && (cantidadDeGatosVecinos = "") // Si el contador quedó en cero, lo definimos como un string vacío
     return cantidadDeGatosVecinos
 }
 
@@ -200,8 +208,8 @@ const expandirArea = (tablero, i, j) => {
                     }
                     tablero[i+n][j+m].estado = "visible"
                     const casillero = document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`)
-                    if (!casillero.classList.contains("visibleTexto")) { // Quiero que se borre el texto en los casilleros que todavía no fueron coloreados
-                        casillero.children[0].classList.add("textoOculto")
+                    if (!casillero?.classList.contains("visibleTexto")) { // Quiero que se borre el texto en los casilleros que todavía no fueron coloreados
+                        casillero?.children[0].classList.add("textoOculto")
                     }
                 }
             }
@@ -243,7 +251,7 @@ const expandirAreaFalsa = (tablero, i, j) => {
                 if (tablero[i+n][j+m].bandera == false) {
                     setTimeout(() => {
                         const casillero = document.getElementById(`fila-${i+1+n}-columna-${j+1+m}`)
-                        if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && casillero.classList.contains("casilleroOculto")) {
+                        if ((tablero[i+n][j+m].gatosVecinos == "") && !(n==0 && m==0) && casillero?.classList.contains("casilleroOculto")) {
                             expandirAreaFalsa(tablero, i+n, j+m)
                         }
                         tablero[i+n][j+m].visibleTexto(tablero, i+n, j+m, casillero)
@@ -292,7 +300,11 @@ const actualizarRegistroPartidas = (partidas, resultado) => {
     }
     const porcentajePartidasGanadas = porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)
     localStorage.setItem("partidasPasadas", JSON.stringify(partidas))
-    victorias.innerText = `${porcentajePartidasGanadas}%`
+    if (victorias instanceof HTMLParagraphElement) {
+        victorias.innerText = `${porcentajePartidasGanadas}%`
+    } else {
+        throw new Error("Error interno")
+    }
     return [porcentajePartidasGanadas, partidas]
 }
 
@@ -314,6 +326,7 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
             mensaje = `Has terminado luego de ${cantidadDeClicks} clicks! Tu porcentaje de victorias es del ${porcentajePartidasGanadas}%`
         }
 
+        //@ts-ignore
         Swal.fire({
             title: 'Bien hecho! Remy te lo agradece ❤️',
             text: mensaje,
@@ -329,16 +342,22 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
             },
         }).then( result => { // Reinicia el registro de partidas, en caso de que el usuario lo decida
             if (result.isDenied) {
+                //@ts-ignore
                 Swal.fire({
                 icon: 'success',
                 title: 'Registro de victorias eliminado',
                 timer: 3000,
                 timerProgressBar: true})
                 localStorage.setItem("partidasPasadas", JSON.stringify({ganadas : 0, perdidas : 0, perdidasContinuas : 0}))
-                victorias.innerText = "0%"
+                if (victorias instanceof HTMLParagraphElement) {
+                    victorias.innerText = "0%"
+                } else {
+                    throw new Error("Error interno")
+                }
             }
         })
     } else { // Alerta especial en caso de haber perdido
+        //@ts-ignore
         Swal.fire({
             icon: 'error',
             title: 'Te descubrieron! 😔',
@@ -349,6 +368,7 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
         }).then( result => {
             // Si perdiste 5 veces seguidas o más, hay un 10% de probabilidades de que te sugiera colocar los inputs por defecto, en caso de que no estén puestos
             if (result.isConfirmed && partidas.perdidasContinuas >= 5 && Math.random()*100 < 10 && inputsOriginales == false) {
+                //@ts-ignore
                 Swal.fire({
                     icon: 'warning',
                     title: 'Alto! Estás perdiendo muy seguido',
@@ -358,15 +378,24 @@ const alertasEspeciales = (resultado, cantidadDeClicks, partidas, inputsOriginal
                     denyButtonText: `Rechazar`
                 }).then( result => {
                     if (result.isConfirmed) {
+                        //@ts-ignore
                         Swal.fire({
                             icon: 'success',
                             title: 'Valores restablecidos',
                             timer: 3000,
                             timerProgressBar: true
                         })
-                        document.getElementById("cantFilas").value = 11 // Deben coincidir con los parámetros por defecto en el index.html
-                        document.getElementById("cantColumnas").value = 11
-                        document.getElementById("dificPorcent").value = 15
+
+                        const divCantFilas = document.querySelector("#cantFilas")
+                        const divCantColumnas = document.querySelector("#cantColumnas")
+                        const divDificPorcent = document.querySelector("#dificPorcent")
+                        if (divCantFilas instanceof HTMLInputElement && divCantColumnas instanceof HTMLInputElement && divDificPorcent instanceof HTMLInputElement) {
+                            divCantFilas.value = "11" // Deben coincidir con los parámetros por defecto en el index.html
+                            divCantColumnas.value = "11"
+                            divDificPorcent.value = "15"
+                        } else {
+                            throw new Error("Error interno")
+                        }
                     }
                 })
             }
@@ -392,9 +421,9 @@ const despedida = (tablero, resultado, cantidadDeClicks, partidas, porcent) => {
                 bloque.visibleTexto(tablero, k, l, casilleroConGato)
 
                 if (resultado == "perder") {
-                    casilleroConGato.classList.add("colorPerdedorFondo")
+                    casilleroConGato?.classList.add("colorPerdedorFondo")
                 } else {
-                    casilleroConGato.classList.add("colorGanadorFondo")
+                    casilleroConGato?.classList.add("colorGanadorFondo")
                 }
             }
         })
@@ -446,12 +475,18 @@ const primerClick = (tablero, filas, columnas, i, j, porcent, cantidadDeClicks, 
     tablero.forEach( (fila, k) => { // Recorro el tablero colocando en cada casillero su número correspondiente o el símbolo de un gato
         fila.forEach( (bloque, l) => {
             const cluster = document.getElementById(`fila-${k+1}-columna-${l+1}`)
-            if (bloque.gato == true) {
+            if (!(cluster?.children[0] instanceof HTMLParagraphElement)) {
+                throw new Error("Error interno")
+            }
+            
+            if (bloque.gato === true) {
                 cluster.children[0].innerText = `🐱`
             } else {
                 const cantidadGatosVecinos = contarGatosVecinos(tablero, k, l)
                 bloque.gatosVecinos = cantidadGatosVecinos
-                cluster.children[0].innerText = `${cantidadGatosVecinos}`
+                if (cantidadGatosVecinos !== 0) {
+                    cluster.children[0].innerText = `${cantidadGatosVecinos}`   
+                }
                 if (cantidadGatosVecinos <= 2) { // Le asigno colores a los números
                     cluster.children[0].classList.add("colorVerde")
 
@@ -471,7 +506,7 @@ const primerClick = (tablero, filas, columnas, i, j, porcent, cantidadDeClicks, 
         fila.forEach( (bloque, l) => {
             const cluster = document.getElementById(`fila-${k+1}-columna-${l+1}`)
             if (bloque.estado == "oculto") {
-                cluster.children[0].classList.add("textoOculto")
+                cluster?.children[0].classList.add("textoOculto")
             }
         })
     })
@@ -556,26 +591,50 @@ const cronometro = document.getElementById("cronometro")
 const tableroHTML = document.getElementById("tablero")
 const victorias = document.getElementById("victorias")
 
-let datosInputs, interval, partidas
+let datosInputs, interval, partidas, consejosRandom
 
-if (localStorage.getItem("datosInputs") != null) { // En caso de que ya exista información con clave "datosInputs" en el localstorage, la agrega a los valores de los inputs
-    datosInputs = JSON.parse(localStorage.getItem("datosInputs"))
-    document.getElementById("cantFilas").value = datosInputs.filas
-    document.getElementById("cantColumnas").value = datosInputs.columnas
-    document.getElementById("dificPorcent").value = datosInputs.porcentGatos
+const localDatosInputs = localStorage.getItem("datosInputs")
+if (localDatosInputs !== null) { // En caso de que ya exista información con clave "datosInputs" en el localstorage, la agrega a los valores de los inputs
+    datosInputs = JSON.parse(localDatosInputs)
+    const divCantFilas = document.querySelector("#cantFilas")
+    const divCantColumnas = document.querySelector("#cantColumnas")
+    const divDificPorcent = document.querySelector("#dificPorcent")
+    if (divCantFilas instanceof HTMLInputElement && divCantColumnas instanceof HTMLInputElement && divDificPorcent instanceof HTMLInputElement) {
+        divCantFilas.value = datosInputs.filas
+        divCantColumnas.value = datosInputs.columnas
+        divDificPorcent.value = datosInputs.porcentGatos
+    } else {
+        throw new Error("Error interno")
+    }
 }
 
-if (localStorage.getItem("partidasPasadas") != null) { // En caso de que ya exista el registro de las partidas pasadas, usa esos datos para escribir el porcentaje de victorias en el texto de la etiqueta con id "victorias"
-    partidas = JSON.parse(localStorage.getItem("partidasPasadas"))
-    victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
+const localPartidasPasadas = localStorage.getItem("partidasPasadas")
+if (localPartidasPasadas !== null) { // En caso de que ya exista el registro de las partidas pasadas, usa esos datos para escribir el porcentaje de victorias en el texto de la etiqueta con id "victorias"
+    partidas = JSON.parse(localPartidasPasadas)
+    if (victorias instanceof HTMLElement) {
+        victorias.innerText = `${porcentajeDeVictorias(partidas.ganadas, partidas.perdidas)}%`
+    } else {
+        throw new Error("Error interno")
+    }
 }
 
-document.getElementById("form").addEventListener("submit", e => { // El juego inicia (o se reinicia) una vez que apretamos en "INICIAR"
+document.getElementById("form")?.addEventListener("submit", e => { // El juego inicia (o se reinicia) una vez que apretamos en "INICIAR"
     e.preventDefault()
 
-    const filas = document.getElementById("cantFilas").value // Obtengo los valores de los inputs
-    const columnas = document.getElementById("cantColumnas").value
-    const porcent = document.getElementById("dificPorcent").value
+    const filasInput = document.querySelector("#cantFilas")
+    const columnasInput = document.querySelector("#cantColumnas")
+    const porcentInput = document.querySelector("#dificPorcent")
+
+    let filas, columnas, porcent
+    if (filasInput instanceof HTMLInputElement && columnasInput instanceof HTMLInputElement && porcentInput instanceof HTMLInputElement) { // Obtengo los valores de los inputs
+        filas = parseInt(filasInput.value)
+        columnas = parseInt(columnasInput.value)
+        porcent = parseInt(porcentInput.value)
+    }
+
+    if (!filas || !columnas || !porcent) { // Este error jamás debe ocurrir
+        throw new Error("Error interno")
+    }
 
     if (filas < 0 || columnas < 0 || filas*columnas <= 9 || filas*columnas > 2500 || porcent <= 0 || porcent > 90) { // Varias condiciones que impiden que el programa se ejcute si el usuario ingresó datos erroneos en los inputs
         mostrarError(filas, columnas)
@@ -583,13 +642,20 @@ document.getElementById("form").addEventListener("submit", e => { // El juego in
     } else {
         iniciarCronometro() // Cada vez que se inicia una nueva partida inicia el cronómetro
 
+        //@ts-ignore Lo ignoro ya que es una clase que viene desde otro archivo
         datosInputs = new InputsPasados(filas, columnas, porcent)
         localStorage.setItem("datosInputs", JSON.stringify(datosInputs)) // Guardo los valores de los inputs en el localstorage (deben ser inputs válidos, por eso están en el "else")
 
         if (localStorage.getItem("partidasPasadas") == null) { // Si no hay un registro de las partidas pasadas, lo crea
             localStorage.setItem("partidasPasadas", JSON.stringify({ganadas : 0, perdidas : 0, perdidasContinuas : 0}))
         }
-        partidas = JSON.parse(localStorage.getItem("partidasPasadas")) // Cada vez que se inicia un nuevo juego se accede al registro de partidas ganadas, perdidas y perdidas continuas
+        
+        const localPartidasPasadas = localStorage.getItem("partidasPasadas")
+        if (localPartidasPasadas !== null) { // Cada vez que se inicia un nuevo juego se accede al registro de partidas ganadas, perdidas y perdidas continuas
+            partidas = JSON.parse(localPartidasPasadas)
+        } else {
+            throw new Error("Error interno")
+        }
 
         const cartelInicial = document.getElementById("cartelInicial")
         if (cartelInicial != null) {
@@ -601,20 +667,24 @@ document.getElementById("form").addEventListener("submit", e => { // El juego in
         let juegoTerminado = false // Se va a convertir a true cuando el juego haya termnado
         let cantGatos // Me va a servir para contar la cantidad de gatos en el tablero
         let cantidadDeClicks = 0 // Contador de clicks izquierdos sobre el tablero
-        const consejosRandom = document.getElementById(`consejosRandom`)
+        
+        consejosRandom = document.getElementById(`consejosRandom`)
+        if (!(consejosRandom instanceof HTMLParagraphElement)) {
+            throw new Error("Error interno")
+        }
         consejosRandom.innerText = ""
 
         tablero.forEach( (fila, i) => {
             fila.forEach( (bloque, j) => {
                 const casillero = document.getElementById(`fila-${i+1}-columna-${j+1}`)
 
-                casillero.addEventListener("click", () => { // Establezco lo que va a suceder cuando hago un click en un casillero. Aclaro que "tablero[i][j]" es lo mismo que "bloque"
+                casillero?.addEventListener("click", () => { // Establezco lo que va a suceder cuando hago un click en un casillero. Aclaro que "tablero[i][j]" es lo mismo que "bloque"
                     if (bloque.bandera == false) {
                         [cantidadDeClicks, cantGatos, primerClickRealizado, juegoTerminado] = clickIzquierdo(tablero, filas, columnas, i, j, porcent, casillero, cantidadDeClicks, primerClickRealizado, cantGatos, juegoTerminado, partidas)
                     }
                 })
 
-                casillero.addEventListener("contextmenu", e => { // Código para agregar o quitar banderas
+                casillero?.addEventListener("contextmenu", e => { // Código para agregar o quitar banderas
                     e.preventDefault()
                     clickDerecho(tablero, i, j, casillero, juegoTerminado)
                 })
